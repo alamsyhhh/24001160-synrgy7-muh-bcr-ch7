@@ -1,0 +1,1947 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Binar Car Rent Api",
+    "version": "1.0.0",
+    "description": "This is a simple CRUD API application made with Express and documented with Swagger",
+    "x-logo": {
+      "url": "https://example.com/logo.png",
+      "altText": "My API Logo"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9000",
+      "description": "Development server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "cars": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "image": {
+            "type": "string"
+          },
+          "onPublish": {
+            "type": "boolean"
+          },
+          "starRent": {
+            "type": "date"
+          },
+          "finishRent": {
+            "type": "date"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "deletedBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "date"
+          },
+          "updatedAt": {
+            "type": "date"
+          }
+        }
+      },
+      "users": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role_id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "date"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "role": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "users_roles": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authentication related operations"
+    },
+    {
+      "name": "Users management",
+      "description": "Operations related to user management"
+    },
+    {
+      "name": "Cars management",
+      "description": "Operations related to cars management"
+    },
+    {
+      "name": "Cars",
+      "description": "Operations related to cars for all users"
+    }
+  ],
+  "paths": {
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login user",
+        "description": "Log in user with provided credentials",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "member@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "member12345"
+                  }
+                }
+              },
+              "examples": {
+                "Member": {
+                  "summary": "Login as Member",
+                  "value": {
+                    "email": "member@gmail.com",
+                    "password": "member12345"
+                  }
+                },
+                "Admin": {
+                  "summary": "Login as Admin",
+                  "value": {
+                    "email": "admin@gmail.com",
+                    "password": "admin12345"
+                  }
+                },
+                "Super Admin": {
+                  "summary": "Login as Super Admin",
+                  "value": {
+                    "email": "sAdmin@gmail.com",
+                    "password": "sadmin12345"
+                  }
+                }
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "description": "The credentials required for logging in",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "User's email address",
+                    "example": "admin@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "User's password",
+                    "example": "admin12345"
+                  }
+                }
+              },
+              "examples": {
+                "form": {
+                  "summary": "Form example",
+                  "value": "email=admin@gmail.com&password=admin12345"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login Success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "username": {
+                              "type": "string",
+                              "example": "member"
+                            }
+                          }
+                        },
+                        "token": {
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM3NzA3NjA1LTYyM2EtNGVhMC1hMDlmLWUzYTYzNjM5YjFmZSIsImlhdCI6MTcxNjcwNDY4MiwiZXhwIjoxNzE2NzkxMDgyfQ.7wZBm3aOE2orVAcjpgZek0cKvRx8DMRufO837XtJpho"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid email or password"
+                    }
+                  }
+                },
+                "examples": {
+                  "invalid Email Or Password": {
+                    "description": "Invalid email or password response",
+                    "value": {
+                      "status": 400,
+                      "message": "Invalid email or password"
+                    }
+                  },
+                  "invalid Email Format": {
+                    "description": "Invalid email format response",
+                    "value": {
+                      "status": 400,
+                      "message": "Invalid email format"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/register": {
+      "post": {
+        "tags": ["Users management"],
+        "summary": "Register a new user",
+        "description": "Register a new user with the provided credentials",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "user1"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "user1@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "user12345"
+                  }
+                }
+              },
+              "examples": {
+                "json": {
+                  "summary": "JSON example",
+                  "value": {
+                    "username": "user1",
+                    "email": "user1@gmail.com",
+                    "password": "user12345"
+                  }
+                }
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "form": {
+                  "summary": "Form example",
+                  "value": "username=user1&email=user1@gmail.com&password=user12345"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully registered user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Register Success"
+                    }
+                  }
+                },
+                "example": {
+                  "value": {
+                    "status": 201,
+                    "message": "Register Success"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email already registered"
+                    }
+                  }
+                },
+                "examples": {
+                  "Email Already Registered": {
+                    "description": "Email already registered response",
+                    "value": {
+                      "status": 400,
+                      "message": "Email already registered"
+                    }
+                  },
+                  "Username Empty": {
+                    "description": "Username cannot be empty response",
+                    "value": {
+                      "status": 400,
+                      "message": "Username cannot be empty"
+                    }
+                  },
+                  "Invalid Email Format": {
+                    "description": "Invalid email format response",
+                    "value": {
+                      "status": 400,
+                      "message": "Invalid email format"
+                    }
+                  },
+                  "Password Too Short": {
+                    "description": "Password must be at least 8 characters long response",
+                    "value": {
+                      "status": 400,
+                      "message": "Password must be at least 8 characters long"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/current-user": {
+      "get": {
+        "tags": ["Users management"],
+        "summary": "Get current user",
+        "description": "Get current logged-in user details",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved car details",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 200,
+                    "message": "User fetched successfully",
+                    "data": {
+                      "user": {
+                        "id": "55c174d4-d893-4686-b056-7f5103cbfb75",
+                        "username": "user1",
+                        "role": "member"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, Access Token Required",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 401,
+                    "message": "Access Token Required"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Token Expired",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 404,
+                    "message": "User not found"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/users": {
+      "get": {
+        "tags": ["Users management"],
+        "summary": "Get all users only super admin to accsess this",
+        "description": "Get all users only super admin to accsess this",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved car details",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 200,
+                    "message": "Users fetched successfully",
+                    "data": [
+                      {
+                        "id": "f770bbb0-bf4c-44a0-a1be-76e90869e1ac",
+                        "username": "andi",
+                        "role": "member"
+                      },
+                      {
+                        "id": "f86f211f-833e-4f5f-ae9b-86ebd554bf72",
+                        "username": "firman",
+                        "role": "admin"
+                      },
+                      {
+                        "id": "d560bb2f-11fe-4676-aae4-fa12cdbd4abb",
+                        "username": "rizki",
+                        "role": "super admin"
+                      },
+                      {
+                        "id": "55c174d4-d893-4686-b056-7f5103cbfb75",
+                        "username": "user1",
+                        "role": "member"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, Access Token Required",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 401,
+                    "message": "Access Token Required"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied Required Admin & Super Admin roles to Access",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Access Denied": {
+                    "description": "Access Denied response",
+
+                    "status": 403,
+                    "message": "Access Denied"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Token Expired",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Access Denied": {
+                    "status": 404,
+                    "message": "User not found"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/users/{userId}/role": {
+      "put": {
+        "tags": ["Users management"],
+        "summary": "Update user role from member to admin",
+        "description": "Update the role of a user with the provided userId from member to admin (only super admin to accsess this)",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the user to update role"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "newRoleId": {
+                    "type": "integer",
+                    "example": "2"
+                  }
+                }
+              },
+              "example": {
+                "newRoleId": "2"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "newRoleId": {
+                    "type": "integer",
+                    "example": 2
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved car details",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 200,
+                    "message": "User role updated successfully"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, Access Token Required",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 401,
+                    "message": "Access Token Required"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied Required Admin & Super Admin roles to Access",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 403,
+                  "message": "Access Denied"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Token Expired",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 404,
+                    "message": "User not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cms/cars": {
+      "get": {
+        "tags": ["Cars management"],
+        "summary": "Get all cars",
+        "description": "Retrieve a list of all cars",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Filter cars by size category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Filter cars by name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of items per page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved cars",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Get All": {
+                    "description": "Get all cars response",
+                    "value": {
+                      "status": 200,
+                      "message": "Get all car data successfully",
+                      "data": [
+                        {
+                          "id": "e208abea-aa23-40a8-91ea-a723785a1dc4",
+                          "name": "Nissan Altima",
+                          "category": "Medium",
+                          "price": 10000,
+                          "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                          "onPublish": true,
+                          "startRent": null,
+                          "finishRent": null,
+                          "createdBy": "admin",
+                          "updatedBy": "admin",
+                          "deletedBy": null,
+                          "createdAt": "2024-05-28T13:36:46.528Z",
+                          "updatedAt": "2024-05-28T13:36:46.528Z"
+                        },
+                        {
+                          "id": "15cf87ed-d3fd-45c4-9126-a1ea83a5289d",
+                          "name": "Chevrolet Camaro",
+                          "category": "Small",
+                          "price": 100.05,
+                          "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                          "onPublish": false,
+                          "startRent": null,
+                          "finishRent": null,
+                          "createdBy": "admin",
+                          "updatedBy": "admin",
+                          "deletedBy": "firman",
+                          "createdAt": "2024-05-28T13:36:46.528Z",
+                          "updatedAt": "2024-05-28T13:36:46.528Z"
+                        },
+                        {
+                          "id": "1b2c266a-9104-4922-b90e-2807f8caaaed",
+                          "name": "Volkswagen Golf",
+                          "category": "large",
+                          "price": 20000,
+                          "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                          "onPublish": true,
+                          "startRent": null,
+                          "finishRent": null,
+                          "createdBy": "admin",
+                          "updatedBy": "admin",
+                          "deletedBy": null,
+                          "createdAt": "2024-05-28T13:36:46.528Z",
+                          "updatedAt": "2024-05-28T13:36:46.528Z"
+                        },
+                        {
+                          "id": "5711b648-287c-479a-b3c0-929c84c744ab",
+                          "name": "Tesla Model S",
+                          "category": "Small",
+                          "price": 30000,
+                          "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                          "onPublish": false,
+                          "startRent": null,
+                          "finishRent": null,
+                          "createdBy": "admin",
+                          "updatedBy": "admin",
+                          "deletedBy": "rizki",
+                          "createdAt": "2024-05-28T13:36:46.528Z",
+                          "updatedAt": "2024-05-28T13:36:46.528Z"
+                        },
+                        {
+                          "id": "026b4ec7-6e9a-4e00-9159-98f768c2860c",
+                          "name": "BMW X5",
+                          "category": "large",
+                          "price": 400.05,
+                          "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                          "onPublish": true,
+                          "startRent": null,
+                          "finishRent": null,
+                          "createdBy": "admin",
+                          "updatedBy": "admin",
+                          "deletedBy": null,
+                          "createdAt": "2024-05-28T13:36:46.528Z",
+                          "updatedAt": "2024-05-28T13:36:46.528Z"
+                        },
+                        {
+                          "id": "799a69d9-1a76-4e73-af10-9880f5f30f90",
+                          "name": "Audi Q7",
+                          "category": "small",
+                          "price": 50.05,
+                          "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                          "onPublish": false,
+                          "startRent": "2012-03-04T17:00:00.000Z",
+                          "finishRent": "2012-03-09T17:00:00.000Z",
+                          "createdBy": "admin",
+                          "updatedBy": "admin",
+                          "deletedBy": null,
+                          "createdAt": "2024-05-28T13:36:46.528Z",
+                          "updatedAt": "2024-05-28T13:36:46.528Z"
+                        },
+                        {
+                          "id": "5be81cb7-badb-4c69-9ce9-0d3a81a9c2bc",
+                          "name": "Mercedes-Benz C-Class",
+                          "category": "large",
+                          "price": 500000,
+                          "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                          "onPublish": true,
+                          "startRent": null,
+                          "finishRent": null,
+                          "createdBy": "admin",
+                          "updatedBy": "admin",
+                          "deletedBy": null,
+                          "createdAt": "2024-05-28T13:36:46.528Z",
+                          "updatedAt": "2024-05-28T13:36:46.528Z"
+                        },
+                        {
+                          "id": "5c80c7eb-c9a1-42cf-9437-dac96433d6e6",
+                          "name": "Toyota RAV4",
+                          "category": "medium",
+                          "price": 30000,
+                          "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                          "onPublish": false,
+                          "startRent": null,
+                          "finishRent": null,
+                          "createdBy": "admin",
+                          "updatedBy": "admin",
+                          "deletedBy": null,
+                          "createdAt": "2024-05-28T13:36:46.528Z",
+                          "updatedAt": "2024-05-28T13:36:46.528Z"
+                        },
+                        {
+                          "id": "71b4bf72-e882-4e52-996c-6ae859f4cdf7",
+                          "name": "Ford F-150",
+                          "category": "small",
+                          "price": 30000,
+                          "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                          "onPublish": true,
+                          "startRent": null,
+                          "finishRent": null,
+                          "createdBy": "admin",
+                          "updatedBy": "admin",
+                          "deletedBy": null,
+                          "createdAt": "2024-05-28T13:36:46.528Z",
+                          "updatedAt": "2024-05-28T13:36:46.528Z"
+                        },
+                        {
+                          "id": "ca0826c8-e092-4bcd-8ae7-f6d1ebb56d03",
+                          "name": "Honda Accord",
+                          "category": "small",
+                          "price": 40000,
+                          "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                          "onPublish": false,
+                          "startRent": null,
+                          "finishRent": null,
+                          "createdBy": "admin",
+                          "updatedBy": "admin",
+                          "deletedBy": null,
+                          "createdAt": "2024-05-28T13:36:46.528Z",
+                          "updatedAt": "2024-05-28T13:36:46.528Z"
+                        },
+                        {
+                          "id": "c7ab567d-d0f7-4002-a80c-216e9cffdcec",
+                          "name": "ferrari",
+                          "category": "large",
+                          "price": 4000000,
+                          "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                          "onPublish": true,
+                          "startRent": null,
+                          "finishRent": null,
+                          "createdBy": "admin",
+                          "updatedBy": "admin",
+                          "deletedBy": null,
+                          "createdAt": "2024-05-28T13:36:46.528Z",
+                          "updatedAt": "2024-05-28T13:36:46.528Z"
+                        },
+                        {
+                          "id": "b1a10f88-abb1-4abd-aa26-0d8ad17a28c9",
+                          "name": "test",
+                          "category": "large",
+                          "price": 1000,
+                          "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1716905286/challenge_5/1716905283094_d5afuO72..png",
+                          "onPublish": false,
+                          "startRent": "2012-03-04T17:00:00.000Z",
+                          "finishRent": "2012-04-04T17:00:00.000Z",
+                          "createdBy": "rizki",
+                          "updatedBy": "rizki",
+                          "deletedBy": null,
+                          "createdAt": "2024-05-28T14:08:06.823Z",
+                          "updatedAt": "2024-05-28T14:08:06.823Z"
+                        }
+                      ]
+                    }
+                  },
+                  "Get All With Name": {
+                    "description": "Get all cars by name 'locallhost:9000/api/v1/cms/cars?name=Chevrolet Camaro'",
+                    "value": {
+                      "status": 200,
+                      "message": "Get all car data successfully",
+                      "data": {
+                        "data": [
+                          {
+                            "id": "15cf87ed-d3fd-45c4-9126-a1ea83a5289d",
+                            "name": "Chevrolet Camaro",
+                            "category": "Small",
+                            "price": 100.05,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": false,
+                            "startRent": null,
+                            "finishRent": null,
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": "firman",
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          }
+                        ],
+                        "totalPages": 1
+                      }
+                    }
+                  },
+                  "Get All With Category": {
+                    "description": "Get all cars by category 'locallhost:9000/api/v1/cms/cars?category=Small'",
+                    "value": {
+                      "status": 200,
+                      "message": "Get all car data successfully",
+                      "data": {
+                        "data": [
+                          {
+                            "id": "15cf87ed-d3fd-45c4-9126-a1ea83a5289d",
+                            "name": "Chevrolet Camaro",
+                            "category": "Small",
+                            "price": 100.05,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": false,
+                            "startRent": null,
+                            "finishRent": null,
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": "firman",
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          },
+                          {
+                            "id": "5711b648-287c-479a-b3c0-929c84c744ab",
+                            "name": "Tesla Model S",
+                            "category": "Small",
+                            "price": 30000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": false,
+                            "startRent": null,
+                            "finishRent": null,
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": "rizki",
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          },
+                          {
+                            "id": "799a69d9-1a76-4e73-af10-9880f5f30f90",
+                            "name": "Audi Q7",
+                            "category": "small",
+                            "price": 50.05,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": false,
+                            "startRent": "2012-03-04T17:00:00.000Z",
+                            "finishRent": "2012-03-09T17:00:00.000Z",
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": null,
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          },
+                          {
+                            "id": "71b4bf72-e882-4e52-996c-6ae859f4cdf7",
+                            "name": "Ford F-150",
+                            "category": "small",
+                            "price": 30000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": true,
+                            "startRent": null,
+                            "finishRent": null,
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": null,
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          },
+                          {
+                            "id": "ca0826c8-e092-4bcd-8ae7-f6d1ebb56d03",
+                            "name": "Honda Accord",
+                            "category": "small",
+                            "price": 40000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": false,
+                            "startRent": null,
+                            "finishRent": null,
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": null,
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          }
+                        ],
+                        "totalPages": 1
+                      }
+                    }
+                  },
+                  "Get All With Page & PageSize": {
+                    "description": "Get all car data with page and page size response 'locallhost:9000/api/v1/cms/cars?page=1&pageSize=10'",
+                    "value": {
+                      "status": 200,
+                      "message": "Get all car data successfully",
+                      "data": {
+                        "data": [
+                          {
+                            "id": "e208abea-aa23-40a8-91ea-a723785a1dc4",
+                            "name": "Nissan Altima",
+                            "category": "Medium",
+                            "price": 10000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": true,
+                            "startRent": null,
+                            "finishRent": null,
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": null,
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          },
+                          {
+                            "id": "15cf87ed-d3fd-45c4-9126-a1ea83a5289d",
+                            "name": "Chevrolet Camaro",
+                            "category": "Small",
+                            "price": 100.05,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": false,
+                            "startRent": null,
+                            "finishRent": null,
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": "firman",
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          },
+                          {
+                            "id": "1b2c266a-9104-4922-b90e-2807f8caaaed",
+                            "name": "Volkswagen Golf",
+                            "category": "large",
+                            "price": 20000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": true,
+                            "startRent": null,
+                            "finishRent": null,
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": null,
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          },
+                          {
+                            "id": "5711b648-287c-479a-b3c0-929c84c744ab",
+                            "name": "Tesla Model S",
+                            "category": "Small",
+                            "price": 30000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": false,
+                            "startRent": null,
+                            "finishRent": null,
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": "rizki",
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          },
+                          {
+                            "id": "026b4ec7-6e9a-4e00-9159-98f768c2860c",
+                            "name": "BMW X5",
+                            "category": "large",
+                            "price": 400.05,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": true,
+                            "startRent": null,
+                            "finishRent": null,
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": null,
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          },
+                          {
+                            "id": "799a69d9-1a76-4e73-af10-9880f5f30f90",
+                            "name": "Audi Q7",
+                            "category": "small",
+                            "price": 50.05,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": false,
+                            "startRent": "2012-03-04T17:00:00.000Z",
+                            "finishRent": "2012-03-09T17:00:00.000Z",
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": null,
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          },
+                          {
+                            "id": "5be81cb7-badb-4c69-9ce9-0d3a81a9c2bc",
+                            "name": "Mercedes-Benz C-Class",
+                            "category": "large",
+                            "price": 500000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": true,
+                            "startRent": null,
+                            "finishRent": null,
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": null,
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          },
+                          {
+                            "id": "5c80c7eb-c9a1-42cf-9437-dac96433d6e6",
+                            "name": "Toyota RAV4",
+                            "category": "medium",
+                            "price": 30000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": false,
+                            "startRent": null,
+                            "finishRent": null,
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": null,
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          },
+                          {
+                            "id": "71b4bf72-e882-4e52-996c-6ae859f4cdf7",
+                            "name": "Ford F-150",
+                            "category": "small",
+                            "price": 30000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": true,
+                            "startRent": null,
+                            "finishRent": null,
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": null,
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          },
+                          {
+                            "id": "ca0826c8-e092-4bcd-8ae7-f6d1ebb56d03",
+                            "name": "Honda Accord",
+                            "category": "small",
+                            "price": 40000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "onPublish": false,
+                            "startRent": null,
+                            "finishRent": null,
+                            "createdBy": "admin",
+                            "updatedBy": "admin",
+                            "deletedBy": null,
+                            "createdAt": "2024-05-28T13:36:46.528Z",
+                            "updatedAt": "2024-05-28T13:36:46.528Z"
+                          }
+                        ],
+                        "totalPages": 2
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, Access Token Required",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 401,
+                    "message": "Access Token Required"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied Required Admin & Super Admin roles to Access",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 403,
+                  "message": "Access Denied"
+                }
+              }
+            }
+          }
+        },
+
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Cars management"],
+        "summary": "Create a new car",
+        "description": "Create a new car with provided details",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Ferrari"
+                  },
+                  "category": {
+                    "type": "string",
+                    "example": "small"
+                  },
+                  "price": {
+                    "type": "integer",
+                    "example": "1000000"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "starRent": {
+                    "type": "date",
+                    "example": "2012/03/05"
+                  },
+                  "finishRent": {
+                    "type": "date",
+                    "example": "2012/04/05"
+                  }
+                },
+                "required": ["name", "category", "price", "image"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created car",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 201,
+                  "message": "Data Berhasil Disimpan",
+                  "data": {
+                    "id": "4516a12b-b1c6-4d55-ab9a-c3b2965d458f",
+                    "name": "Ferrari",
+                    "category": "small",
+                    "price": 1000000,
+                    "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1717247423/challenge_5/1717247419830_jTO0SHwp..png",
+                    "onPublish": true,
+                    "startRent": null,
+                    "finishRent": "2012-04-04T17:00:00.000Z",
+                    "createdBy": "rizki",
+                    "updatedBy": "rizki",
+                    "deletedBy": null,
+                    "createdAt": "2024-06-01T13:10:25.007Z",
+                    "updatedAt": "2024-06-01T13:10:25.007Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Missing Required Fields": {
+                    "description": "Missing Required Fields",
+                    "value": {
+                      "status": 400,
+                      "message": "Missing required fields"
+                    }
+                  },
+                  "Price must be a positive number": {
+                    "description": "Price must be a positive number",
+                    "value": {
+                      "status": 400,
+                      "message": "Price must be a positive number"
+                    }
+                  },
+                  "No image file uploaded": {
+                    "description": "No image file uploaded",
+                    "value": {
+                      "status": 400,
+                      "message": "No image file uploaded"
+                    }
+                  },
+                  "Only image files": {
+                    "description": "Only image files",
+                    "value": {
+                      "status": 400,
+                      "message": "Hanya diperbolehkan untuk mengunggah file gambar (JPG, PNG)!"
+                    }
+                  },
+                  "Unexpected field": {
+                    "description": "Unexpected field. Please check your file upload",
+                    "value": {
+                      "status": 400,
+                      "message": "Unexpected field. Please check your file upload"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, Access Token Required",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 401,
+                    "message": "Access Token Required"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied Required Admin & Super Admin roles to Access",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 403,
+                  "message": "Access Denied"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/cars/{id}": {
+      "get": {
+        "tags": ["Cars management"],
+        "summary": "Get car by ID",
+        "description": "Retrieve details of a car by its ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the car to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved car details",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 200,
+                    "message": "Get car data by ID successfully",
+                    "data": {
+                      "id": "4516a12b-b1c6-4d55-ab9a-c3b2965d458f",
+                      "name": "Bmw",
+                      "category": "Medium",
+                      "price": 500000,
+                      "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1717247864/challenge_5/1717247861177_SjbJwGx7..png",
+                      "onPublish": false,
+                      "startRent": "2015-04-04T17:00:00.000Z",
+                      "finishRent": "2015-05-04T17:00:00.000Z",
+                      "createdBy": "rizki",
+                      "updatedBy": "firman",
+                      "deletedBy": "firman",
+                      "createdAt": "2024-06-01T13:10:25.007Z",
+                      "updatedAt": "2024-06-01T13:18:19.096Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Car not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 404,
+                    "message": "Car with the specified ID not found"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, Access Token Required",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 401,
+                    "message": "Access Token Required"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied Required Admin & Super Admin roles to Access",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 403,
+                  "message": "Access Denied"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["Cars management"],
+        "summary": "Update car",
+        "description": "Update the details of a car",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the car to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Bmw"
+                  },
+                  "category": {
+                    "type": "string",
+                    "example": "Medium"
+                  },
+                  "price": {
+                    "type": "integer",
+                    "example": "500000"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "starRent": {
+                    "type": "date",
+                    "example": "2015/03/05"
+                  },
+                  "finishRent": {
+                    "type": "date",
+                    "example": "2015/04/05"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved car details",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 200,
+                    "message": "Car updated successfully",
+                    "data": {
+                      "id": "4516a12b-b1c6-4d55-ab9a-c3b2965d458f",
+                      "name": "Bmw",
+                      "category": "Medium",
+                      "price": 500000,
+                      "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1717247864/challenge_5/1717247861177_SjbJwGx7..png",
+                      "onPublish": false,
+                      "startRent": null,
+                      "finishRent": "2015-04-04T17:00:00.000Z",
+                      "createdBy": "rizki",
+                      "updatedBy": "firman",
+                      "deletedBy": null,
+                      "createdAt": "2024-06-01T13:10:25.007Z",
+                      "updatedAt": "2024-06-01T13:17:45.496Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Car not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 404,
+                    "message": "Car with the specified ID not found"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, Access Token Required",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 401,
+                    "message": "Access Token Required"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied Required Admin & Super Admin roles to Access",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 403,
+                  "message": "Access Denied"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Cars management"],
+        "summary": "Delete car",
+        "description": "Delete a car by its ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the car to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved car details",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 200,
+                    "message": "Car deleted successfully"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Car not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 404,
+                    "message": "Car with the specified ID not found"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, Access Token Required",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 401,
+                    "message": "Access Token Required"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied Required Admin & Super Admin roles to Access",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": 403,
+                  "message": "Access Denied"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cars": {
+      "get": {
+        "tags": ["Cars"],
+        "summary": "Get all cars",
+        "description": "Retrieve a list of all cars",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Filter cars by size category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Filter cars by name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of items per page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved cars",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Get All": {
+                    "description": "Get all cars response",
+                    "value": {
+                      "status": 200,
+                      "message": "Cars fetched successfully",
+                      "data": {
+                        "data": [
+                          {
+                            "id": "e208abea-aa23-40a8-91ea-a723785a1dc4",
+                            "name": "Nissan Altima",
+                            "category": "Medium",
+                            "price": 10000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "startRent": null,
+                            "finishRent": null
+                          },
+                          {
+                            "id": "1b2c266a-9104-4922-b90e-2807f8caaaed",
+                            "name": "Volkswagen Golf",
+                            "category": "large",
+                            "price": 20000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "startRent": null,
+                            "finishRent": null
+                          },
+                          {
+                            "id": "026b4ec7-6e9a-4e00-9159-98f768c2860c",
+                            "name": "BMW X5",
+                            "category": "large",
+                            "price": 400.05,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "startRent": null,
+                            "finishRent": null
+                          },
+                          {
+                            "id": "5be81cb7-badb-4c69-9ce9-0d3a81a9c2bc",
+                            "name": "Mercedes-Benz C-Class",
+                            "category": "large",
+                            "price": 500000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "startRent": null,
+                            "finishRent": null
+                          },
+                          {
+                            "id": "71b4bf72-e882-4e52-996c-6ae859f4cdf7",
+                            "name": "Ford F-150",
+                            "category": "small",
+                            "price": 30000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "startRent": null,
+                            "finishRent": null
+                          },
+                          {
+                            "id": "c7ab567d-d0f7-4002-a80c-216e9cffdcec",
+                            "name": "ferrari",
+                            "category": "large",
+                            "price": 4000000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "startRent": null,
+                            "finishRent": null
+                          }
+                        ],
+                        "totalPages": 1
+                      }
+                    },
+                    "Get All With Name": {
+                      "description": "Get all cars by name 'locallhost:9000/api/v1/cars?name=Nissan Altima'",
+                      "value": {
+                        "status": 200,
+                        "message": "Cars fetched successfully",
+                        "data": {
+                          "data": [
+                            {
+                              "id": "e208abea-aa23-40a8-91ea-a723785a1dc4",
+                              "name": "Nissan Altima",
+                              "category": "Medium",
+                              "price": 10000,
+                              "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                              "startRent": null,
+                              "finishRent": null
+                            }
+                          ],
+                          "totalPages": 1
+                        }
+                      }
+                    }
+                  },
+                  "Get All With Category": {
+                    "description": "Get all cars by category 'locallhost:9000/api/v1/cars?category=Small'",
+                    "value": {
+                      "status": 200,
+                      "message": "Cars fetched successfully",
+                      "data": {
+                        "data": [
+                          {
+                            "id": "71b4bf72-e882-4e52-996c-6ae859f4cdf7",
+                            "name": "Ford F-150",
+                            "category": "small",
+                            "price": 30000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "startRent": null,
+                            "finishRent": null
+                          }
+                        ],
+                        "totalPages": 1
+                      }
+                    }
+                  },
+                  "Get All With Page & PageSize": {
+                    "description": "Get all car data with page and page size response 'locallhost:9000/api/v1/cars?page=1&pageSize=10'",
+                    "value": {
+                      "status": 200,
+                      "message": "Cars fetched successfully",
+                      "data": {
+                        "data": [
+                          {
+                            "id": "e208abea-aa23-40a8-91ea-a723785a1dc4",
+                            "name": "Nissan Altima",
+                            "category": "Medium",
+                            "price": 10000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "startRent": null,
+                            "finishRent": null
+                          },
+                          {
+                            "id": "1b2c266a-9104-4922-b90e-2807f8caaaed",
+                            "name": "Volkswagen Golf",
+                            "category": "large",
+                            "price": 20000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "startRent": null,
+                            "finishRent": null
+                          },
+                          {
+                            "id": "026b4ec7-6e9a-4e00-9159-98f768c2860c",
+                            "name": "BMW X5",
+                            "category": "large",
+                            "price": 400.05,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "startRent": null,
+                            "finishRent": null
+                          },
+                          {
+                            "id": "5be81cb7-badb-4c69-9ce9-0d3a81a9c2bc",
+                            "name": "Mercedes-Benz C-Class",
+                            "category": "large",
+                            "price": 500000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "startRent": null,
+                            "finishRent": null
+                          },
+                          {
+                            "id": "71b4bf72-e882-4e52-996c-6ae859f4cdf7",
+                            "name": "Ford F-150",
+                            "category": "small",
+                            "price": 30000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "startRent": null,
+                            "finishRent": null
+                          },
+                          {
+                            "id": "c7ab567d-d0f7-4002-a80c-216e9cffdcec",
+                            "name": "ferrari",
+                            "category": "large",
+                            "price": 4000000,
+                            "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                            "startRent": null,
+                            "finishRent": null
+                          }
+                        ],
+                        "totalPages": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cars/{id}": {
+      "get": {
+        "tags": ["Cars"],
+        "summary": "Get car by ID",
+        "description": "Retrieve details of a car by its ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the car to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved car details",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 200,
+                    "message": "Car fetched successfully",
+                    "data": {
+                      "id": "c7ab567d-d0f7-4002-a80c-216e9cffdcec",
+                      "name": "ferrari",
+                      "category": "large",
+                      "price": 4000000,
+                      "image": "https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png",
+                      "startRent": null,
+                      "finishRent": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Car not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "value": {
+                    "status": 404,
+                    "message": "Car not found"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    }
+  }
+}

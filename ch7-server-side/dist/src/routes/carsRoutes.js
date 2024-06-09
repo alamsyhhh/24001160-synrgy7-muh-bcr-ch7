@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.carRoutes = void 0;
+const express_1 = __importDefault(require("express"));
+const carsAdminController_1 = __importDefault(require("../controllers/cars/carsAdminController"));
+const carsUsersController_1 = __importDefault(require("../controllers/cars/carsUsersController"));
+const multer_1 = __importDefault(require("../middlewares/multer"));
+const authMiddlewares_1 = require("../middlewares/authMiddlewares");
+const router = express_1.default.Router();
+exports.carRoutes = router;
+router.get('/cars', carsUsersController_1.default.getAllCars);
+router.get('/cars/:id', carsUsersController_1.default.getCarById);
+router.get('/cms/cars', authMiddlewares_1.authenticateToken, (0, authMiddlewares_1.authorizeRoles)('2', '3'), carsAdminController_1.default.getAllCars);
+router.get('/cms/cars/:id', authMiddlewares_1.authenticateToken, (0, authMiddlewares_1.authorizeRoles)('2', '3'), carsAdminController_1.default.getCarById);
+router.post('/cms/cars', authMiddlewares_1.authenticateToken, (0, authMiddlewares_1.authorizeRoles)('2', '3'), multer_1.default.single('image'), carsAdminController_1.default.createCar);
+router.put('/cms/cars/:id', authMiddlewares_1.authenticateToken, (0, authMiddlewares_1.authorizeRoles)('2', '3'), multer_1.default.single('image'), carsAdminController_1.default.updateCar);
+router.delete('/cms/cars/:id', authMiddlewares_1.authenticateToken, (0, authMiddlewares_1.authorizeRoles)('2', '3'), carsAdminController_1.default.deleteCar);
