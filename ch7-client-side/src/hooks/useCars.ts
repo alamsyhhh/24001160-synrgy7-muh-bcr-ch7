@@ -1,8 +1,13 @@
+// useCars.ts
+
 import { useEffect, useState } from 'react';
 import {
+  deleteCarById,
   getAllCars,
   getCarsByCategory,
   getCarsByName,
+  getCarById,
+  updateCarById,
 } from '../services/carServices';
 
 export interface Car {
@@ -96,7 +101,51 @@ const useCars = () => {
     }
   };
 
-  return { cars, loading, error, filterCarsByCategory, filterCarsByName };
+  const fetchCarById = async (id: string) => {
+    try {
+      const carData = await getCarById(id);
+      return carData.data;
+      console.log(carData.data);
+    } catch (error) {
+      setError('Failed to fetch car data by ID');
+      return null;
+    }
+  };
+
+  const updateCar = async (id: string, formData: FormData) => {
+    try {
+      const updatedCar = await updateCarById(id, formData);
+      return updatedCar;
+    } catch (error) {
+      setError('Failed to update car');
+      return null;
+    }
+  };
+
+  const deleteCar = async (id: string) => {
+    try {
+      const response = await deleteCarById(id);
+      console.log(response);
+      if (response.status === 200) {
+        setCars((prevCars) => prevCars.filter((car) => car.id !== id));
+      } else {
+        setError('Failed to delete car');
+      }
+    } catch (error) {
+      setError('Failed to delete car');
+    }
+  };
+
+  return {
+    cars,
+    loading,
+    error,
+    filterCarsByCategory,
+    filterCarsByName,
+    fetchCarById,
+    updateCar,
+    deleteCar,
+  };
 };
 
 export default useCars;

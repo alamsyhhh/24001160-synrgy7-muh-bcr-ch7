@@ -8,6 +8,7 @@ import PrivateRoute from './privateRoutes';
 import DashboardPage from '../pages/Admin/dashboardPage';
 import CarDashboardPage from '../pages/Admin/carsDashboardPage';
 import CreateCarPage from '../pages/Admin/addCarDashboardPage';
+import UpdateCarPage from '../pages/Admin/updateCarDashboard';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/cardashboard" element={<CarDashboardPage />} />
         <Route path="/addcardashboard" element={<CreateCarPage />} />
+        <Route path="/updatecardashboard" element={<UpdateCarPage />} />
       </Route>
     </Routes>
   );

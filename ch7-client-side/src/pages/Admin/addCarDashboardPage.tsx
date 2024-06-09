@@ -17,7 +17,7 @@ const CreateCarPage: React.FC = () => {
               'Add New Car',
             ]}
           />
-          <h4>Dashboard Components</h4>
+          <h4>Add New Car</h4>
           <FormAddComponent />
         </>
       }

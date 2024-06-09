@@ -52,3 +52,34 @@ export const getCarsByName = async (name: string) => {
     throw new Error('Failed to fetch cars data by name');
   }
 };
+
+export const deleteCarById = async (id: string) => {
+  try {
+    const config = getAuthConfig();
+    const response = await axios.delete(`${URL}/${id}`, config);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to delete car');
+  }
+};
+
+export const getCarById = async (id: string) => {
+  try {
+    const config = getAuthConfig();
+    const response = await axios.get(`${URL}/${id}`, config);
+    return response.data;
+    console.log(response.data);
+  } catch (error) {
+    throw new Error('Failed to fetch car data by ID');
+  }
+};
+
+export const updateCarById = async (id: string, formData: FormData) => {
+  try {
+    const config = getAuthConfig();
+    const response = await axios.put(`${URL}/${id}`, formData, config);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to update car');
+  }
+};

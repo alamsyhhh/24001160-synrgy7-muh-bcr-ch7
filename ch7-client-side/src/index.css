@@ -1487,7 +1487,7 @@ a {
 .nav_icon {
   font-size: 1.25rem;
 }
-.show {
+.showw {
   left: 0;
 }
 .body-pd {
@@ -1569,9 +1569,17 @@ a {
   border: 1px solid #dee2e6;
 }
 
+.table {
+  background-color: #f8f9fa !important;
+}
+
 .table-input {
   width: 400px; /* Adjust the width as needed */
 }
 .label-column {
-  width: 100px; /* Adjust the width as needed */
+  width: 100px;
+}
+
+.tb {
+  background-color: #f8f9fa !important;
 }
