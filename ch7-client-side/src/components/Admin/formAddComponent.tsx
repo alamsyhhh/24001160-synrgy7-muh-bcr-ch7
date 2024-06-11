@@ -51,7 +51,7 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true); // Set loading to true
+    setIsLoading(true);
     const formData = new FormData();
     formData.append('name', formState.name);
     formData.append('category', formState.category);
@@ -96,7 +96,7 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
             <tr>
               <td className="tb label-column">
                 <label htmlFor="name" className="col-form-label">
-                  Name
+                  Name <span className="required-asterisk">*</span>
                 </label>
               </td>
               <td className="tb">
@@ -106,14 +106,14 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
                   className="form-control table-input"
                   value={formState.name}
                   onChange={handleInputChange}
-                  disabled={isLoading} // Disable input when loading
+                  disabled={isLoading}
                 />
               </td>
             </tr>
             <tr>
               <td className="tb label-column">
                 <label htmlFor="price" className="col-form-label">
-                  Harga
+                  Harga <span className="required-asterisk">*</span>
                 </label>
               </td>
               <td className="tb">
@@ -123,14 +123,14 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
                   className="form-control table-input"
                   value={formState.price}
                   onChange={handleInputChange}
-                  disabled={isLoading} // Disable input when loading
+                  disabled={isLoading}
                 />
               </td>
             </tr>
             <tr>
               <td className="tb label-column">
                 <label htmlFor="category" className="col-form-label">
-                  Category
+                  Category <span className="required-asterisk">*</span>
                 </label>
               </td>
               <td className="tb">
@@ -139,7 +139,7 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
                   className="form-select table-input"
                   value={formState.category}
                   onChange={handleInputChange}
-                  disabled={isLoading} // Disable select when loading
+                  disabled={isLoading}
                 >
                   <option disabled value="">
                     Select Category
@@ -153,7 +153,7 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
             <tr>
               <td className="tb label-column">
                 <label htmlFor="image" className="col-form-label">
-                  Foto
+                  Foto <span className="required-asterisk">*</span>
                 </label>
               </td>
               <td className="tb">
@@ -168,8 +168,9 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
                   id="image"
                   className="form-control table-input"
                   onChange={handleFileChange}
-                  disabled={isLoading} // Disable input when loading
+                  disabled={isLoading}
                 />
+                <small className="file-size-info">File size max 2MB</small>
               </td>
             </tr>
             <tr>
@@ -185,7 +186,7 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
                   className="form-control table-input"
                   value={formState.startRent}
                   onChange={handleInputChange}
-                  disabled={isLoading} // Disable input when loading
+                  disabled={isLoading}
                 />
               </td>
             </tr>
@@ -202,7 +203,7 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
                   className="form-control table-input"
                   value={formState.finishRent}
                   onChange={handleInputChange}
-                  disabled={isLoading} // Disable input when loading
+                  disabled={isLoading}
                 />
               </td>
             </tr>
@@ -212,7 +213,7 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
                   type="button"
                   className="btn btn-danger"
                   onClick={() => navigate('/cardashboard')}
-                  disabled={isLoading} // Disable button when loading
+                  disabled={isLoading}
                 >
                   Cancel
                 </button>

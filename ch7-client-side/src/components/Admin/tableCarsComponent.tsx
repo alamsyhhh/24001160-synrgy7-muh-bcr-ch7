@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Car } from '../../services/carServices';
 import formatDateTime from '../../utils/formatDateTimeUtil'; // Import the formatDateTime function
 
@@ -23,6 +23,40 @@ const CarTable: React.FC<CarTableProps> = ({
   setPage,
   setPageSize,
 }) => {
+  const [sortConfig, setSortConfig] = useState<{
+    key: keyof Car;
+    direction: 'asc' | 'desc';
+  } | null>(null);
+
+  const handleSort = (key: keyof Car) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig?.key === key && sortConfig?.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedCars = React.useMemo(() => {
+    if (sortConfig !== null) {
+      return [...cars].sort((a, b) => {
+        const key = sortConfig?.key;
+        const direction = sortConfig?.direction;
+
+        if (a[key] !== undefined && b[key] !== undefined) {
+          if (a[key]! < b[key]!) {
+            return direction === 'asc' ? -1 : 1;
+          }
+          if (a[key]! > b[key]!) {
+            return direction === 'asc' ? 1 : -1;
+          }
+        }
+
+        return 0;
+      });
+    }
+    return cars;
+  }, [cars, sortConfig]);
+
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
@@ -49,6 +83,13 @@ const CarTable: React.FC<CarTableProps> = ({
     return pages;
   };
 
+  const getSortIcon = (key: keyof Car) => {
+    if (!sortConfig || sortConfig.key !== key) {
+      return '▼';
+    }
+    return sortConfig.direction === 'asc' ? '▲' : '▼';
+  };
+
   return (
     <div className="mt-4">
       <div className="d-flex align-items-center mb-3">
@@ -63,13 +104,27 @@ const CarTable: React.FC<CarTableProps> = ({
         <thead className="table-primary">
           <tr>
             <th scope="col">No</th>
-            <th scope="col">Name</th>
-            <th scope="col">Category</th>
-            <th scope="col">Price</th>
-            <th scope="col">Start Rent</th>
-            <th scope="col">Finish Rent</th>
-            <th scope="col">Created At</th>
-            <th scope="col">Updated At</th>
+            <th scope="col" onClick={() => handleSort('name')}>
+              Name {getSortIcon('name')}
+            </th>
+            <th scope="col" onClick={() => handleSort('category')}>
+              Category {getSortIcon('category')}
+            </th>
+            <th scope="col" onClick={() => handleSort('price')}>
+              Price {getSortIcon('price')}
+            </th>
+            <th scope="col" onClick={() => handleSort('startRent')}>
+              Start Rent {getSortIcon('startRent')}
+            </th>
+            <th scope="col" onClick={() => handleSort('finishRent')}>
+              Finish Rent {getSortIcon('finishRent')}
+            </th>
+            <th scope="col" onClick={() => handleSort('createdAt')}>
+              Created At {getSortIcon('createdAt')}
+            </th>
+            <th scope="col" onClick={() => handleSort('updatedAt')}>
+              Updated At {getSortIcon('updatedAt')}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -86,18 +141,15 @@ const CarTable: React.FC<CarTableProps> = ({
               </td>
             </tr>
           ) : (
-            cars.map((car, index) => (
+            sortedCars.map((car, index) => (
               <tr key={car.id}>
                 <th scope="row">{(page - 1) * pageSize + index + 1}</th>
                 <td>{car.name}</td>
                 <td>{car.category}</td>
                 <td>{car.price}</td>
                 <td>{car.startRent ? formatDateTime(car.startRent) : '-'}</td>
-
                 <td>{car.finishRent ? formatDateTime(car.finishRent) : '-'}</td>
-
                 <td>{formatDateTime(car.createdAt)}</td>
-
                 <td>{formatDateTime(car.updatedAt)}</td>
               </tr>
             ))

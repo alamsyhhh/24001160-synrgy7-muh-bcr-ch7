@@ -18,7 +18,6 @@ const AppRoutes: React.FC = () => {
       <Route path="/signIn" element={<SignInPage />} />
       <Route path="/signUp" element={<SignUpPage />} />
 
-      {/* Gunakan PrivateRoute sebagai route parent */}
       <Route element={<PrivateRoute />}>
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/cardashboard" element={<CarDashboardPage />} />

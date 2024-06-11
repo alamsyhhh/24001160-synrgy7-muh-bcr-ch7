@@ -25,6 +25,9 @@ const ToastComponent: React.FC<ToastProps> = ({ show, onClose, message }) => {
         borderRadius: '8px',
         padding: '16px',
         zIndex: 9999,
+        textAlign: 'center',
+        textTransform: 'uppercase', 
+        fontSize: '1.2em', 
       }}
     >
       <Toast.Body>{message}</Toast.Body>

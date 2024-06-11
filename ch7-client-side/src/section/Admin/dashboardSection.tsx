@@ -65,26 +65,29 @@ const Dashboard: React.FC<DashboardProps> = ({ activePage, content }) => {
                   activePage === 'dashboard' ? 'active' : ''
                 }`}
               >
-                <i className="bx bx-grid-alt nav_icon"></i>
+                <i className="bx bx-grid-alt nav_icon" data-feather="home"></i>
                 <span className="nav_name">Dashboard</span>
               </Link>
-              <Link to="#" className="nav_link">
+              {/* <Link to="#" className="nav_link">
                 <i className="bx bx-user nav_icon"></i>
                 <span className="nav_name">Users</span>
-              </Link>
+              </Link> */}
               <Link
                 to="/cardashboard"
                 className={`nav_link ${activePage === 'cars' ? 'active' : ''}`}
               >
-                <i className="bx bx-message-square-detail nav_icon"></i>
+                <i
+                  className="bx bx-message-square-detail nav_icon"
+                  data-feather="truck"
+                ></i>
                 <span className="nav_name">Cars</span>
               </Link>
             </div>
           </div>
-          <a className="nav_link" onClick={() => setIsModalOpen(true)}>
-            <i className="bx bx-log-out nav_icon"></i>
+          <button className="nav_button" onClick={() => setIsModalOpen(true)}>
+            <i className="bx bx-log-out nav_icon" data-feather="log-out"></i>
             <span className="nav_name">SignOut</span>
-          </a>
+          </button>
         </nav>
       </div>
 

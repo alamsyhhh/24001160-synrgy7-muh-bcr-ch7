@@ -11,7 +11,7 @@ export async function seed(knex: Knex): Promise<void> {
       category: 'Medium',
       price: 10000,
       image:
-        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png',
+        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1718104264/car/yru9fp0ufgmmh5sp0oly.jpg',
       onPublish: 'true',
       createdBy: 'admin',
       updatedBy: 'admin',
@@ -24,7 +24,7 @@ export async function seed(knex: Knex): Promise<void> {
       category: 'Small',
       price: 100.05,
       image:
-        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png',
+        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1718104262/car/qdkq3mpop2mmyol704ml.jpg',
       onPublish: 'false',
       createdBy: 'admin',
       updatedBy: 'admin',
@@ -38,7 +38,7 @@ export async function seed(knex: Knex): Promise<void> {
       category: 'large',
       price: 20000,
       image:
-        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png',
+        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1718104262/car/o5bkw6zdraa3cwmkqa0x.jpg',
       onPublish: 'true',
       createdBy: 'admin',
       updatedBy: 'admin',
@@ -51,7 +51,7 @@ export async function seed(knex: Knex): Promise<void> {
       category: 'Small',
       price: 30000,
       image:
-        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png',
+        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1718104261/car/iept5vav3ttjdabuypeg.jpg',
       onPublish: 'false',
       createdBy: 'admin',
       updatedBy: 'admin',
@@ -65,7 +65,7 @@ export async function seed(knex: Knex): Promise<void> {
       category: 'large',
       price: 400.05,
       image:
-        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png',
+        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1718104260/car/skt6rvjgfdcvgzxmioob.jpg',
       onPublish: 'true',
       createdBy: 'admin',
       updatedBy: 'admin',
@@ -78,7 +78,7 @@ export async function seed(knex: Knex): Promise<void> {
       category: 'small',
       price: 50.05,
       image:
-        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png',
+        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1718104260/car/t3r878htecswlvikjztb.jpg',
       onPublish: 'false',
       createdBy: 'admin',
       updatedBy: 'admin',
@@ -93,7 +93,7 @@ export async function seed(knex: Knex): Promise<void> {
       category: 'large',
       price: 500000,
       image:
-        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png',
+        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1718104260/car/drk5dkruknaqw1mrlflq.jpg',
       onPublish: 'true',
       createdBy: 'admin',
       updatedBy: 'admin',
@@ -106,7 +106,7 @@ export async function seed(knex: Knex): Promise<void> {
       category: 'medium',
       price: 30000,
       image:
-        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png',
+        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1718104260/car/meb1vwuvkwxly4qpqpcq.jpg',
       onPublish: 'false',
       createdBy: 'admin',
       updatedBy: 'admin',
@@ -119,7 +119,7 @@ export async function seed(knex: Knex): Promise<void> {
       category: 'small',
       price: 30000,
       image:
-        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png',
+        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1718104259/car/jbstk6ky4kqpqzqvvi1a.jpg',
       onPublish: 'true',
       createdBy: 'admin',
       updatedBy: 'admin',
@@ -132,7 +132,7 @@ export async function seed(knex: Knex): Promise<void> {
       category: 'small',
       price: 40000,
       image:
-        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png',
+        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1718104258/car/tudrnarti3smdd2nksap.jpg',
       onPublish: 'false',
       createdBy: 'admin',
       updatedBy: 'admin',
@@ -145,7 +145,20 @@ export async function seed(knex: Knex): Promise<void> {
       category: 'large',
       price: 4000000,
       image:
-        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1710400118/img_car_lhk3me.png',
+        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1718104258/car/atenkg2n272rtbk0r8w3.jpg',
+      onPublish: 'true',
+      createdBy: 'admin',
+      updatedBy: 'admin',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: uuidv4(),
+      name: 'Nissan X-Trail',
+      category: 'large',
+      price: 4000000,
+      image:
+        'https://res.cloudinary.com/dmuuypm2t/image/upload/v1718104258/car/jtcpthk9litexsvkwjgn.jpg',
       onPublish: 'true',
       createdBy: 'admin',
       updatedBy: 'admin',

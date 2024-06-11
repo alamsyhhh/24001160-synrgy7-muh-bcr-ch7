@@ -1,60 +1,43 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import FormInput from '../../components/formInput';
-import { useAuth } from '../../hooks/useSignIn';
-import { useRegister } from '../../hooks/useSignUp';
+import { useAuth } from '../../contexts/authContext';
 
 interface AuthFormProps {
   isSignUp: boolean;
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({ isSignUp }) => {
-  const [username, setUsername] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [confirmPassword, setConfirmPassword] = React.useState('');
-  const {
-    login,
-    loading: loginLoading,
-    error: loginError,
-    success: loginSuccess,
-    setSuccess: setLoginSuccess,
-  } = useAuth();
-  const {
-    register,
-    loading: registerLoading,
-    error: registerError,
-    success: registerSuccess,
-    setError: setRegisterError,
-    setSuccess: setRegisterSuccess,
-  } = useRegister();
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const { login, register, loading, error, success, setError, setSuccess } =
+    useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (loginSuccess) {
-      const userRole = JSON.parse(localStorage.getItem('user')!).role;
-      if (userRole === 'member') {
-        navigate('/');
+    if (success) {
+      if (isSignUp) {
+        navigate('/signIn');
       } else {
-        navigate('/dashboard');
+        const userRole = JSON.parse(localStorage.getItem('user')!).role;
+        if (userRole === 'member') {
+          navigate('/');
+        } else {
+          navigate('/dashboard');
+        }
       }
-      setLoginSuccess(false);
+      setSuccess(false);
     }
-  }, [loginSuccess, navigate, setLoginSuccess]);
-
-  useEffect(() => {
-    if (registerSuccess) {
-      navigate('/signIn');
-      setRegisterSuccess(false);
-    }
-  }, [registerSuccess, navigate, setRegisterSuccess]);
+  }, [success, isSignUp, navigate, setSuccess]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (isSignUp) {
       if (password !== confirmPassword) {
-        setRegisterError('Passwords do not match!');
+        setError('Passwords do not match!');
         return;
       }
       await register(username, email, password);
@@ -62,9 +45,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ isSignUp }) => {
       await login(email, password);
     }
   };
-
-  const loading = isSignUp ? registerLoading : loginLoading;
-  const error = isSignUp ? registerError : loginError;
 
   return (
     <div className="container-grid">

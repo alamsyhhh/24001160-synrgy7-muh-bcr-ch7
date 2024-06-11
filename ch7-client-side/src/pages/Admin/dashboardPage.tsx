@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Dashboard from '../../section/Admin/dashboardSection';
-import CarTable from '../../components/Admin/tableComponent';
+import CarTable from '../../components/Admin/tableCarsComponent';
+import UserTable from '../../components/Admin/userTableComponent';
 import { Car, getPaginatedCars } from '../../services/carServices';
+import useUsers from '../../hooks/useUsers';
 import Breadcrumb from '../../components/Admin/breadcrumbComponent';
+import feather from 'feather-icons';
 
 const DashboardPage: React.FC = () => {
   const [cars, setCars] = useState<Car[]>([]);
@@ -12,7 +15,22 @@ const DashboardPage: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
 
+  const {
+    users,
+    loading: userLoading,
+    error: userError,
+    page: userPage,
+    pageSize: userPageSize,
+    totalPages: userTotalPages,
+    setPage: setUserPage,
+    setPageSize: setUserPageSize,
+  } = useUsers();
+
   const breadcrumbs = ['Dashboard', 'Dashboard'];
+
+  useEffect(() => {
+    feather.replace();
+  }, [cars]);
 
   useEffect(() => {
     fetchCars();
@@ -39,7 +57,7 @@ const DashboardPage: React.FC = () => {
       content={
         <>
           <Breadcrumb breadcrumbs={breadcrumbs} />
-          <h4>Dashboard</h4>
+          <h4 className="mt-5">Dashboard</h4>
           <CarTable
             cars={cars}
             loading={loading}
@@ -49,6 +67,16 @@ const DashboardPage: React.FC = () => {
             totalPages={totalPages}
             setPage={setPage}
             setPageSize={setPageSize}
+          />
+          <UserTable
+            users={users}
+            loading={userLoading}
+            error={userError}
+            page={userPage}
+            pageSize={userPageSize}
+            totalPages={userTotalPages}
+            setPage={setUserPage}
+            setPageSize={setUserPageSize}
           />
         </>
       }

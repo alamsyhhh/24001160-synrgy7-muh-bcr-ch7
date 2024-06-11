@@ -48,6 +48,7 @@ const CarDashboardPage: React.FC = () => {
   const handleFilterClick = (filter: string) => {
     setActiveFilter(filter === 'All' ? null : filter);
     filterCarsByCategory(filter);
+    navigate(location.pathname); // Reset the URL without search query parameters
   };
 
   useEffect(() => {

@@ -60,13 +60,13 @@ const CarCardComponent: React.FC<CarCardProps> = ({
                 <span>
                   <i className="inp-icon user" data-feather="clock"></i>
                 </span>
-                <p>{car.updatedAt ? formatDateTime(car.updatedAt) : '-'}</p>
+                <p>Updated at {car.updatedAt ? formatDateTime(car.updatedAt) : '-'}</p>
               </div>
             </div>
             <div className="card-buttons d-flex justify-content-center gap-2 flex-wrap">
               <button
                 type="button"
-                className="btn btn-danger flex-grow-1"
+                className="btn btn-outline-danger flex-grow-1"
                 onClick={() => setShowModal(true)}
               >
                 <i className="bi bi-trash3-fill"> Delete</i>

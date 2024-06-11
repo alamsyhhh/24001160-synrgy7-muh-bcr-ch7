@@ -1,8 +1,8 @@
 import React from 'react';
-import { Car } from '../../services/carServices';
+import { User } from '../../services/userService';
 
-interface CarTableProps {
-  cars: Car[];
+interface UserTableProps {
+  users: User[];
   loading: boolean;
   error: string | null;
   page: number;
@@ -12,8 +12,8 @@ interface CarTableProps {
   setPageSize: (pageSize: number) => void;
 }
 
-const CarTable: React.FC<CarTableProps> = ({
-  cars,
+const UserTable: React.FC<UserTableProps> = ({
+  users,
   loading,
   error,
   page,
@@ -48,49 +48,43 @@ const CarTable: React.FC<CarTableProps> = ({
     return pages;
   };
 
-  if (error) return <p>{error}</p>;
-
   return (
-    <div className="mt-4">
+    <div className="mt-1">
       <div className="d-flex align-items-center mb-3">
         <img
           src="./img/Rectangle9.png"
           alt=""
           style={{ marginRight: '10px', height: '40px' }}
         />
-        <h6 className="mb-0">List Car</h6>
+        <h6 className="mb-0">List Users</h6>
       </div>
       <table className="table table-hover w-100">
         <thead className="table-primary">
           <tr>
             <th scope="col">No</th>
-            <th scope="col">Name</th>
-            <th scope="col">Category</th>
-            <th scope="col">Price</th>
-            <th scope="col">Start Rent</th>
-            <th scope="col">Finish Rent</th>
-            <th scope="col">Created At</th>
-            <th scope="col">Updated At</th>
+            <th scope="col">Username</th>
+            <th scope="col">Role</th>
           </tr>
         </thead>
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan={8} className="text-center">
+              <td colSpan={3} className="text-center">
                 Loading...
               </td>
             </tr>
+          ) : error ? (
+            <tr>
+              <td colSpan={3} className="text-center text-danger">
+                {error}
+              </td>
+            </tr>
           ) : (
-            cars.map((car, index) => (
-              <tr key={car.id}>
+            users.map((user, index) => (
+              <tr key={user.id}>
                 <th scope="row">{(page - 1) * pageSize + index + 1}</th>
-                <td>{car.name}</td>
-                <td>{car.category}</td>
-                <td>{car.price}</td>
-                <td>{car.startRent || '-'}</td>
-                <td>{car.finishRent || '-'}</td>
-                <td>{new Date(car.createdAt).toLocaleDateString()}</td>
-                <td>{new Date(car.updatedAt).toLocaleDateString()}</td>
+                <td>{user.username}</td>
+                <td>{user.role}</td>
               </tr>
             ))
           )}
@@ -155,4 +149,4 @@ const CarTable: React.FC<CarTableProps> = ({
   );
 };
 
-export default CarTable;
+export default UserTable;
