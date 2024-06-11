@@ -81,8 +81,24 @@ export class UsersController {
 
   async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
-      const users = await this.usersService.getAllUsers();
-      wrapResponse(res, 200, 'Users fetched successfully', users);
+      let { page, pageSize } = req.query;
+
+      // Parse page and pageSize to numbers
+      const pageNumber = page ? parseInt(page as string, 10) : 1; // Assuming default page is 1
+      const pageSizeNumber = pageSize ? parseInt(pageSize as string, 10) : 10; // Assuming default pageSize is 10
+
+      const { users, totalCount } = await this.usersService.getAllUsers(
+        pageNumber,
+        pageSizeNumber
+      );
+
+      // Calculate total pages
+      const totalPages = Math.ceil(totalCount / pageSizeNumber);
+
+      wrapResponse(res, 200, 'Users fetched successfully', {
+        users,
+        totalPages,
+      });
     } catch (error) {
       console.error('Error fetching all users:', error);
       handleInternalServerError(res, 'Internal Server Error');

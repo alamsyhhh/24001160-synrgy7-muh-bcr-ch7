@@ -10,6 +10,7 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ activePage, content }) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const user = getItemFromLocalStorage('user');
 
@@ -19,7 +20,7 @@ const Dashboard: React.FC<DashboardProps> = ({ activePage, content }) => {
 
   const handleSignOut = () => {
     localStorage.clear();
-    navigate('/signIn');
+    navigate('/');
   };
 
   const navbarClass = `l-navbar ${isNavOpen ? 'showw' : ''}`;
@@ -80,14 +81,42 @@ const Dashboard: React.FC<DashboardProps> = ({ activePage, content }) => {
               </Link>
             </div>
           </div>
-          <Link to="/" className="nav_link" onClick={handleSignOut}>
+          <a className="nav_link" onClick={() => setIsModalOpen(true)}>
             <i className="bx bx-log-out nav_icon"></i>
             <span className="nav_name">SignOut</span>
-          </Link>
+          </a>
         </nav>
       </div>
 
       <div className={bodyClass}>{content}</div>
+
+      {isModalOpen && (
+        <div className="modal show" style={{ display: 'block' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-body text-center">
+                <img
+                  src="./img/img-BeepBeep.png"
+                  alt=""
+                  className="img-fluid mb-4 mx-auto"
+                />
+                <p>Are you sure you want to sign out?</p>
+              </div>
+              <div className="modal-footer">
+                <button className="btn btn-danger" onClick={handleSignOut}>
+                  Yes
+                </button>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

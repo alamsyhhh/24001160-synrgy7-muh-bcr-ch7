@@ -31,11 +31,11 @@ const CarCardComponent: React.FC<CarCardProps> = ({
 
   return (
     <>
-      <div className="col-sm-4 mb-3 mt-3 mb-sm-0">
+      <div className="col-sm-4 mb-3 mt-3 mb-sm-4">
         <div className="card">
           <img
             src={car.image}
-            className="img-fluid card-img-top"
+            className="constant-image img-fluid card-img-top"
             alt={car.name}
           />
           <div className="card-body">
@@ -66,16 +66,16 @@ const CarCardComponent: React.FC<CarCardProps> = ({
             <div className="card-buttons d-flex justify-content-center gap-2 flex-wrap">
               <button
                 type="button"
-                className="btn btn-outline-danger flex-grow-1"
+                className="btn btn-danger flex-grow-1"
                 onClick={() => setShowModal(true)}
               >
-                Delete
+                <i className="bi bi-trash3-fill"> Delete</i>
               </button>
               <button
                 className="btn btn-success flex-grow-1"
                 onClick={onUpdate}
               >
-                Update
+                <i className="bi bi-pencil-square"> Update</i>
               </button>
             </div>
           </div>

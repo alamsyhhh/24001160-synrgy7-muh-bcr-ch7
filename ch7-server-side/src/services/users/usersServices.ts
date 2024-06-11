@@ -90,13 +90,25 @@ export class UsersService implements IUsersService {
     return new UserCurrentDto(user.id, user.username, role?.userRole ?? '');
   }
 
-  async getAllUsers(): Promise<UserCurrentDto[]> {
-    const users = await this.usersRepository.findAllUsersWithRoles();
+  async getAllUsers(
+    page: number,
+    pageSize: number
+  ): Promise<{ users: UserCurrentDto[]; totalCount: number }> {
+    const totalCount = await this.getTotalCount();
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    const offset = (page - 1) * pageSize;
+    const users = await this.usersRepository.findAllUsersWithRoles(
+      offset,
+      pageSize // Menggunakan pageSize sebagai nilai untuk parameter limit
+    );
+
     const usersWithRoles = users.map(
       (user) =>
         new UserCurrentDto(user.id, user.username, user.role?.userRole ?? '')
     );
-    return usersWithRoles;
+
+    return { users: usersWithRoles, totalCount };
   }
 
   async updateUserRole(userId: string, newRoleId: string): Promise<void> {
@@ -123,5 +135,9 @@ export class UsersService implements IUsersService {
     }
 
     await this.usersRepository.updateUserRole(userId, newRoleId);
+  }
+
+  async getTotalCount(): Promise<number> {
+    return this.usersRepository.getTotalCount();
   }
 }

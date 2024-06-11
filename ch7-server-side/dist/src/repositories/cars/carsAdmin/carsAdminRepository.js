@@ -30,7 +30,7 @@ class CarRepository {
     }
     getAllCars(category, name, page, pageSize) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = carsModel_1.CarsModel.query();
+            const query = carsModel_1.CarsModel.query().orderBy('createdAt', 'desc');
             if (category) {
                 const categoryLowerCase = category.toLowerCase();
                 query.whereRaw('LOWER(category) = ?', [categoryLowerCase]);

@@ -230,7 +230,7 @@ class CarService implements ICarService {
       });
 
       if (updatedCar) {
-        wrapErrorResponse(res, 200, 'Car deleted successfully');
+        wrapErrorResponse(res, 200, 'Data Berhasil Dihapus');
       } else {
         wrapErrorResponse(res, 400, 'Failed to delete car');
       }

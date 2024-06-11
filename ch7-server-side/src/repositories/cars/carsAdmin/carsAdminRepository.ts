@@ -27,7 +27,7 @@ class CarRepository implements ICarRepository {
     page?: number,
     pageSize?: number
   ): Promise<CarDTO[]> {
-    const query = CarsModel.query();
+    const query = CarsModel.query().orderBy('createdAt', 'desc');
 
     if (category) {
       const categoryLowerCase = category.toLowerCase();

@@ -7,19 +7,23 @@ interface ToastProps {
   message: string;
 }
 
-const ToastComponent: React.FC<ToastProps> = ({ show, onClose, message }) => {
+const ToastComponentBlack: React.FC<ToastProps> = ({
+  show,
+  onClose,
+  message,
+}) => {
   return (
     <Toast
       onClose={onClose}
       show={show}
       delay={5000}
-      autohide={false}
+      autohide={true}
       style={{
         position: 'fixed',
         top: '90px',
         left: '50%',
         transform: 'translateX(-50%)',
-        backgroundColor: '#28a745',
+        backgroundColor: '#000000',
         color: 'white',
         minWidth: '600px',
         borderRadius: '8px',
@@ -32,4 +36,4 @@ const ToastComponent: React.FC<ToastProps> = ({ show, onClose, message }) => {
   );
 };
 
-export default ToastComponent;
+export default ToastComponentBlack;

@@ -1,6 +1,4 @@
-// useCars.ts
-
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   deleteCarById,
   getAllCars,
@@ -8,6 +6,7 @@ import {
   getCarsByName,
   getCarById,
   updateCarById,
+  createCar as createCarService,
 } from '../services/carServices';
 
 export interface Car {
@@ -25,12 +24,9 @@ const useCars = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string>('');
 
-  useEffect(() => {
-    fetchCars();
-  }, []);
-
-  const fetchCars = async () => {
+  const fetchCars = useCallback(async () => {
     try {
       const carsData = await getAllCars();
       if (Array.isArray(carsData)) {
@@ -53,34 +49,41 @@ const useCars = () => {
       }
       setLoading(false);
     }
-  };
+  }, []);
 
-  const filterCarsByCategory = async (category: string) => {
-    try {
-      if (category === '') {
-        fetchCars();
-      } else {
-        const filteredCarsData = await getCarsByCategory(category);
-        if (
-          filteredCarsData &&
-          filteredCarsData.data &&
-          Array.isArray(filteredCarsData.data.cars)
-        ) {
-          setCars(filteredCarsData.data.cars);
+  useEffect(() => {
+    fetchCars();
+  }, [fetchCars]);
+
+  const filterCarsByCategory = useCallback(
+    async (category: string) => {
+      try {
+        if (category === '') {
+          fetchCars();
         } else {
-          console.error(
-            'Data received from server is not in the expected format:',
-            filteredCarsData
-          );
-          setError('Invalid data received from server');
+          const filteredCarsData = await getCarsByCategory(category);
+          if (
+            filteredCarsData &&
+            filteredCarsData.data &&
+            Array.isArray(filteredCarsData.data.cars)
+          ) {
+            setCars(filteredCarsData.data.cars);
+          } else {
+            console.error(
+              'Data received from server is not in the expected format:',
+              filteredCarsData
+            );
+            setError('Invalid data received from server');
+          }
         }
+      } catch (error) {
+        setError('Failed to fetch cars data by category');
       }
-    } catch (error) {
-      setError('Failed to fetch cars data by category');
-    }
-  };
+    },
+    [fetchCars]
+  );
 
-  const filterCarsByName = async (name: string) => {
+  const filterCarsByName = useCallback(async (name: string) => {
     try {
       const filteredCarsData = await getCarsByName(name);
       if (
@@ -99,7 +102,7 @@ const useCars = () => {
     } catch (error) {
       setError('Failed to fetch cars data by name');
     }
-  };
+  }, []);
 
   const fetchCarById = async (id: string) => {
     try {
@@ -112,9 +115,25 @@ const useCars = () => {
     }
   };
 
+  const createCar = async (formData: FormData): Promise<unknown> => {
+    try {
+      const newCar = await createCarService(formData);
+      // Mengambil pesan dari respons server jika ada
+      const { message } = newCar.data || {};
+      // Menetapkan pesan toast dengan pesan dari respons server
+      setToastMessage(message || 'Data Berhasil Disimpan');
+      return newCar;
+    } catch (error) {
+      setError('Failed to create car');
+      return null;
+    }
+  };
+
   const updateCar = async (id: string, formData: FormData) => {
     try {
       const updatedCar = await updateCarById(id, formData);
+      const { message } = updatedCar.data || {};
+      setToastMessage(message || 'Car successfully updated!');
       return updatedCar;
     } catch (error) {
       setError('Failed to update car');
@@ -128,6 +147,8 @@ const useCars = () => {
       console.log(response);
       if (response.status === 200) {
         setCars((prevCars) => prevCars.filter((car) => car.id !== id));
+        const { message } = response.data || {};
+        setToastMessage(message || 'Data Berhasil Dihapus');
       } else {
         setError('Failed to delete car');
       }
@@ -140,11 +161,14 @@ const useCars = () => {
     cars,
     loading,
     error,
+    fetchCars,
     filterCarsByCategory,
     filterCarsByName,
     fetchCarById,
+    createCar,
     updateCar,
     deleteCar,
+    toastMessage,
   };
 };
 

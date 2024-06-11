@@ -33,9 +33,12 @@ class UsersRepository {
             return usersModel_1.UsersModel.query().insert(user);
         });
     }
-    findAllUsersWithRoles() {
+    findAllUsersWithRoles(offset, limit // Tambahkan parameter limit dengan tipe number
+    ) {
         return __awaiter(this, void 0, void 0, function* () {
-            const users = yield usersModel_1.UsersModel.query();
+            const users = yield usersModel_1.UsersModel.query()
+                .offset(offset) // Set offset
+                .limit(limit); // Set limit
             const usersWithRoles = yield Promise.all(users.map((user) => __awaiter(this, void 0, void 0, function* () {
                 var _a;
                 const role = yield rolesModel_1.RolesModel.query().findById(user.roleId);
@@ -47,6 +50,12 @@ class UsersRepository {
     updateUserRole(userId, newRoleId) {
         return __awaiter(this, void 0, void 0, function* () {
             return usersModel_1.UsersModel.query().patchAndFetchById(userId, { roleId: newRoleId });
+        });
+    }
+    getTotalCount() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const count = (yield usersModel_1.UsersModel.query().resultSize());
+            return count;
         });
     }
 }

@@ -186,7 +186,7 @@ class CarService {
                     updatedAt: new Date(),
                 });
                 if (updatedCar) {
-                    (0, responseHandler_1.wrapErrorResponse)(res, 200, 'Car deleted successfully');
+                    (0, responseHandler_1.wrapErrorResponse)(res, 200, 'Data Berhasil Dihapus');
                 }
                 else {
                     (0, responseHandler_1.wrapErrorResponse)(res, 400, 'Failed to delete car');

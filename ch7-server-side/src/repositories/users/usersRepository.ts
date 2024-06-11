@@ -21,10 +21,13 @@ export class UsersRepository implements IUsersRepository {
     return UsersModel.query().insert(user);
   }
 
-  async findAllUsersWithRoles(): Promise<
-    (UsersModel & { role?: { userRole: string } })[]
-  > {
-    const users = await UsersModel.query();
+  async findAllUsersWithRoles(
+    offset: number,
+    limit: number // Tambahkan parameter limit dengan tipe number
+  ): Promise<(UsersModel & { role?: { userRole: string } })[]> {
+    const users = await UsersModel.query()
+      .offset(offset) // Set offset
+      .limit(limit); // Set limit
     const usersWithRoles = await Promise.all(
       users.map(async (user: any) => {
         const role = await RolesModel.query().findById(user.roleId);
@@ -36,5 +39,10 @@ export class UsersRepository implements IUsersRepository {
 
   async updateUserRole(userId: string, newRoleId: string): Promise<UsersModel> {
     return UsersModel.query().patchAndFetchById(userId, { roleId: newRoleId });
+  }
+
+  async getTotalCount(): Promise<number> {
+    const count = (await UsersModel.query().resultSize()) as number;
+    return count;
   }
 }

@@ -10,14 +10,18 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
       <ol className="breadcrumb">
         {breadcrumbs.map((breadcrumb, index) => (
           <React.Fragment key={index}>
-            {index > 0 && <span className="mx-1">{'>'}</span>}
             <li className="breadcrumb-item">
               {index < breadcrumbs.length - 1 ? (
-                <a href="#">{breadcrumb}</a>
+                <a href="#" className="breadcrumb-separator">
+                  {breadcrumb}
+                </a>
               ) : (
                 <span>{breadcrumb}</span>
               )}
             </li>
+            {index < breadcrumbs.length - 1 && (
+              <span className="breadcrumb-separator">{' > '}</span>
+            )}
           </React.Fragment>
         ))}
       </ol>

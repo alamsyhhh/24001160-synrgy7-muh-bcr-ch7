@@ -11,7 +11,11 @@ export interface IUsersService {
     email: string,
     password: string
   ): Promise<{ user: UserDto; token: string }>;
-  getAllUsers(): Promise<UserCurrentDto[]>;
+  getAllUsers(
+    page: number,
+    pageSize: number
+  ): Promise<{ users: UserCurrentDto[]; totalCount: number }>;
   updateUserRole(userId: string, newRoleId: string): Promise<void>;
   getCurrentUser(userId: string): Promise<UserDto>;
+  getTotalCount(): Promise<number>;
 }

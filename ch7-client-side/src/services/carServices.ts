@@ -83,3 +83,51 @@ export const updateCarById = async (id: string, formData: FormData) => {
     throw new Error('Failed to update car');
   }
 };
+
+export const createCar = async (formData: FormData) => {
+  try {
+    const config = getAuthConfig();
+    const response = await axios.post(URL, formData, config);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to create car');
+  }
+};
+
+export interface Car {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  image: string;
+  startRent: string | null;
+  finishRent: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaginatedCarsResponse {
+  status: number;
+  message: string;
+  data: {
+    cars: Car[];
+    totalPages: number;
+  };
+}
+
+// Example function to fetch paginated cars
+export const getPaginatedCars = async (
+  page: number,
+  pageSize: number
+): Promise<PaginatedCarsResponse> => {
+  const response = await axios.get<PaginatedCarsResponse>(
+    `${BASE_URL}/cms/cars`,
+    {
+      params: { page, pageSize },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }
+  );
+  return response.data;
+};

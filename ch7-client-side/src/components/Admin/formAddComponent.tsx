@@ -1,22 +1,18 @@
-// FormAddComponent.tsx
-
 import React, { useState } from 'react';
-import { Car } from '../../hooks/useCars';
 import { useNavigate } from 'react-router-dom';
-import useCars from '../../hooks/useCars';
+import useCars, { Car } from '../../hooks/useCars';
 
 interface FormAddComponentProps {
   carData?: Car;
 }
 
-// Define the type for the form state
 interface FormState {
   name: string;
   category: string;
   price: string;
   startRent: string;
   finishRent: string;
-  image?: File; // Add image property here
+  image?: File;
 }
 
 const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
@@ -30,7 +26,8 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
     startRent: carData?.startRent?.slice(0, 10) || '',
     finishRent: carData?.finishRent?.slice(0, 10) || '',
   });
-  const { updateCar } = useCars();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { createCar, updateCar } = useCars();
   const navigate = useNavigate();
 
   const handleInputChange = (
@@ -54,6 +51,7 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true); // Set loading to true
     const formData = new FormData();
     formData.append('name', formState.name);
     formData.append('category', formState.category);
@@ -64,16 +62,34 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
     formData.append('startRent', formState.startRent);
     formData.append('finishRent', formState.finishRent);
 
-    const result = await updateCar(carData?.id as string, formData);
-    if (result) {
-      navigate('/cardashboard', {
-        state: { message: 'Car updated successfully' },
-      });
+    let result;
+    if (carData) {
+      result = await updateCar(carData.id, formData);
+      if (result) {
+        navigate('/cardashboard', {
+          state: { message: 'Car updated successfully' },
+        });
+      }
+    } else {
+      result = await createCar(formData);
+      if (result) {
+        navigate('/cardashboard', {
+          state: { message: 'Car created successfully' },
+        });
+      }
     }
+    setIsLoading(false);
   };
 
   return (
     <div className="card custom-card p-4">
+      {isLoading && (
+        <div className="position-absolute top-50 start-50 translate-middle">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <table className="table table-borderless">
           <tbody>
@@ -90,10 +106,50 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
                   className="form-control table-input"
                   value={formState.name}
                   onChange={handleInputChange}
+                  disabled={isLoading} // Disable input when loading
                 />
               </td>
             </tr>
-            {/* Add similar code for other form fields */}
+            <tr>
+              <td className="tb label-column">
+                <label htmlFor="price" className="col-form-label">
+                  Harga
+                </label>
+              </td>
+              <td className="tb">
+                <input
+                  type="number"
+                  id="price"
+                  className="form-control table-input"
+                  value={formState.price}
+                  onChange={handleInputChange}
+                  disabled={isLoading} // Disable input when loading
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className="tb label-column">
+                <label htmlFor="category" className="col-form-label">
+                  Category
+                </label>
+              </td>
+              <td className="tb">
+                <select
+                  id="category"
+                  className="form-select table-input"
+                  value={formState.category}
+                  onChange={handleInputChange}
+                  disabled={isLoading} // Disable select when loading
+                >
+                  <option disabled value="">
+                    Select Category
+                  </option>
+                  <option value="small">Small</option>
+                  <option value="medium">Medium</option>
+                  <option value="large">Large</option>
+                </select>
+              </td>
+            </tr>
             <tr>
               <td className="tb label-column">
                 <label htmlFor="image" className="col-form-label">
@@ -112,10 +168,10 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
                   id="image"
                   className="form-control table-input"
                   onChange={handleFileChange}
+                  disabled={isLoading} // Disable input when loading
                 />
               </td>
             </tr>
-            {/* Other form fields */}
             <tr>
               <td className="tb label-column">
                 <label htmlFor="startRent" className="col-form-label">
@@ -129,6 +185,7 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
                   className="form-control table-input"
                   value={formState.startRent}
                   onChange={handleInputChange}
+                  disabled={isLoading} // Disable input when loading
                 />
               </td>
             </tr>
@@ -145,6 +202,7 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
                   className="form-control table-input"
                   value={formState.finishRent}
                   onChange={handleInputChange}
+                  disabled={isLoading} // Disable input when loading
                 />
               </td>
             </tr>
@@ -154,12 +212,17 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
                   type="button"
                   className="btn btn-danger"
                   onClick={() => navigate('/cardashboard')}
+                  disabled={isLoading} // Disable button when loading
                 >
                   Cancel
                 </button>
               </td>
               <td className="tb">
-                <button type="submit" className="btn btn-primary">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={isLoading}
+                >
                   Submit
                 </button>
               </td>

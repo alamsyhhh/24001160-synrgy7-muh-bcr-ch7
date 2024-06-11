@@ -81,11 +81,15 @@ class UsersService {
             return new usersCurrentDto_1.UserCurrentDto(user.id, user.username, (_a = role === null || role === void 0 ? void 0 : role.userRole) !== null && _a !== void 0 ? _a : '');
         });
     }
-    getAllUsers() {
+    getAllUsers(page, pageSize) {
         return __awaiter(this, void 0, void 0, function* () {
-            const users = yield this.usersRepository.findAllUsersWithRoles();
+            const totalCount = yield this.getTotalCount();
+            const totalPages = Math.ceil(totalCount / pageSize);
+            const offset = (page - 1) * pageSize;
+            const users = yield this.usersRepository.findAllUsersWithRoles(offset, pageSize // Menggunakan pageSize sebagai nilai untuk parameter limit
+            );
             const usersWithRoles = users.map((user) => { var _a, _b; return new usersCurrentDto_1.UserCurrentDto(user.id, user.username, (_b = (_a = user.role) === null || _a === void 0 ? void 0 : _a.userRole) !== null && _b !== void 0 ? _b : ''); });
-            return usersWithRoles;
+            return { users: usersWithRoles, totalCount };
         });
     }
     updateUserRole(userId, newRoleId) {
@@ -110,6 +114,11 @@ class UsersService {
                 });
             }
             yield this.usersRepository.updateUserRole(userId, newRoleId);
+        });
+    }
+    getTotalCount() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.usersRepository.getTotalCount();
         });
     }
 }

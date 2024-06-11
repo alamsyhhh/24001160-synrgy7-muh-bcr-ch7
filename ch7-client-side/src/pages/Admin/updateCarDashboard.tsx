@@ -1,5 +1,3 @@
-// Inside UpdateCarPage component
-
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Dashboard from '../../section/Admin/dashboardSection';
