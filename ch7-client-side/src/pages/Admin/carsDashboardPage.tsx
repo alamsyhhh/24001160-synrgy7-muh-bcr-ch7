@@ -3,7 +3,8 @@ import feather from 'feather-icons';
 import Dashboard from '../../section/Admin/dashboardSection';
 import CarCardComponent from '../../components/Admin/carCardComponent2';
 import Breadcrumb from '../../components/Admin/breadcrumbComponent';
-import useCars, { Car } from '../../hooks/useCars';
+import { Car } from '../../contexts/carsContext';
+import { useCarsContext } from '../../hooks/useCars';
 import CarFilterButton from '../../components/Admin/buttonOutlineComponent';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ToastComponent from '../../components/Admin/toastContainer';
@@ -12,7 +13,7 @@ import ShimmerCard from '../../components/Admin/carCardPlaceholder';
 
 const CarDashboardPage: React.FC = () => {
   const { cars, loading, filterCarsByCategory, filterCarsByName, deleteCar } =
-    useCars();
+    useCarsContext();
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [searchedCars, setSearchedCars] = useState<Car[]>([]);
   const location = useLocation();
@@ -48,7 +49,7 @@ const CarDashboardPage: React.FC = () => {
   const handleFilterClick = (filter: string) => {
     setActiveFilter(filter === 'All' ? null : filter);
     filterCarsByCategory(filter);
-    navigate(location.pathname); // Reset the URL without search query parameters
+    navigate(location.pathname);
   };
 
   useEffect(() => {

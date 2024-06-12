@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useCars, { Car } from '../../hooks/useCars';
+import { Car } from '../../contexts/carsContext';
+import { useCarsContext } from '../../hooks/useCars';
 
 interface FormAddComponentProps {
   carData?: Car;
@@ -27,7 +28,7 @@ const FormAddComponent: React.FC<FormAddComponentProps> = ({ carData }) => {
     finishRent: carData?.finishRent?.slice(0, 10) || '',
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { createCar, updateCar } = useCars();
+  const { createCar, updateCar } = useCarsContext();
   const navigate = useNavigate();
 
   const handleInputChange = (

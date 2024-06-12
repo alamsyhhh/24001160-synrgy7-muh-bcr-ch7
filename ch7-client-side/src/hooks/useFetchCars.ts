@@ -19,7 +19,6 @@ const useFetchCars = (): [Car[], boolean] => {
           const randomHour = Math.floor(Math.random() * 24);
           availableDate.setUTCHours(randomHour);
 
-          // Convert UTC time to WIB time (UTC +7 hours)
           const wibDate = new Date(
             availableDate.getTime() + 7 * 60 * 60 * 1000
           );

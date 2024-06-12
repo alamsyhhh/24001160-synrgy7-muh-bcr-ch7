@@ -3,11 +3,12 @@ import { Link, useLocation } from 'react-router-dom';
 import Dashboard from '../../section/Admin/dashboardSection';
 import FormAddComponent from '../../components/Admin/formAddComponent';
 import Breadcrumb from '../../components/Admin/breadcrumbComponent';
-import useCars, { Car } from '../../hooks/useCars';
+import { Car } from '../../contexts/carsContext';
+import { useCarsContext } from '../../hooks/useCars';
 import feather from 'feather-icons';
 
 const UpdateCarPage: React.FC = () => {
-  const { fetchCarById } = useCars();
+  const { fetchCarById } = useCarsContext();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const carId = queryParams.get('id');

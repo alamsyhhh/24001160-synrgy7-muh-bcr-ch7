@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Car } from '../../services/carServices';
-import formatDateTime from '../../utils/formatDateTimeUtil'; // Import the formatDateTime function
+import formatDateTime from '../../utils/formatDateTimeUtil';
 
 interface CarTableProps {
   cars: Car[];

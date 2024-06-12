@@ -11,7 +11,6 @@ const WhyUsSection: React.FC = () => {
           Mengapa harus pilih Binar Car Rental?
         </p>
 
-        {/* Why us Card */}
         <div className="row mt-5 mb-5">
           <div className="col-md-6 col-lg-3 my-sm-2">
             <div className="card whyus-card">
@@ -85,7 +84,6 @@ const WhyUsSection: React.FC = () => {
             </div>
           </div>
         </div>
-        {/* Why us Card */}
       </div>
     </section>
   );

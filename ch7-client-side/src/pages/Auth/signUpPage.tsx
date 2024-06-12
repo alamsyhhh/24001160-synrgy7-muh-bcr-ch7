@@ -1,4 +1,3 @@
-// signUpPage.tsx
 import React from 'react';
 import '../../index.css';
 import AuthForm from '../../section/Admin/authSection';

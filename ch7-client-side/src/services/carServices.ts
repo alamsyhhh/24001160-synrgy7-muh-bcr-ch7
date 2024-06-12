@@ -115,7 +115,6 @@ export interface PaginatedCarsResponse {
   };
 }
 
-// Example function to fetch paginated cars
 export const getPaginatedCars = async (
   page: number,
   pageSize: number

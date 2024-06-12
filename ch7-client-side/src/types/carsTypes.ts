@@ -9,8 +9,16 @@ export interface Car {
   updatedAt: string | null;
 }
 
-export interface ApiResponse<T> {
-  status: number;
-  message: string;
-  data: T;
+export interface CarsContextType {
+  cars: Car[];
+  loading: boolean;
+  error: string | null;
+  toastMessage: string;
+  fetchCars: () => void;
+  filterCarsByCategory: (category: string) => void;
+  filterCarsByName: (name: string) => void;
+  fetchCarById: (id: string) => Promise<Car | null>;
+  createCar: (formData: FormData) => Promise<unknown>;
+  updateCar: (id: string, formData: FormData) => Promise<unknown>;
+  deleteCar: (id: string) => Promise<void>;
 }

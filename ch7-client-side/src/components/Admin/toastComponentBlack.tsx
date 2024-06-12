@@ -31,7 +31,7 @@ const ToastComponentBlack: React.FC<ToastProps> = ({
         zIndex: 9999,
         textAlign: 'center',
         textTransform: 'uppercase',
-        fontSize: '0.5em',
+        fontSize: '1.2em',
       }}
     >
       <Toast.Body>{message}</Toast.Body>
