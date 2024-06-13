@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Dashboard from '../../section/Admin/dashboardSection';
 import FormAddComponent from '../../components/Admin/formAddComponent';
 import Breadcrumb from '../../components/Admin/breadcrumbComponent';
@@ -9,6 +8,7 @@ const CreateCarPage: React.FC = () => {
   useEffect(() => {
     feather.replace();
   }, []);
+
   return (
     <Dashboard
       activePage="cars"
@@ -16,9 +16,9 @@ const CreateCarPage: React.FC = () => {
         <>
           <Breadcrumb
             breadcrumbs={[
-              'Cars',
-              <Link to="/cardashboard">List Cars</Link>,
-              'Add New Car',
+              { label: 'Cars', path: '/cardashboard' },
+              { label: 'List Cars', path: '/cardashboard' },
+              { label: 'Add New Car', path: '' },
             ]}
           />
           <h4>Add New Car</h4>

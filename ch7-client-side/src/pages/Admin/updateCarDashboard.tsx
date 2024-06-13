@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Dashboard from '../../section/Admin/dashboardSection';
 import FormAddComponent from '../../components/Admin/formAddComponent';
 import Breadcrumb from '../../components/Admin/breadcrumbComponent';
@@ -42,11 +42,9 @@ const UpdateCarPage: React.FC = () => {
         <>
           <Breadcrumb
             breadcrumbs={[
-              'Cars',
-              <Link to="/cardashboard" key="list-cars">
-                List Cars
-              </Link>,
-              'Update Car',
+              { label: 'Cars', path: '/cars' },
+              { label: 'List Cars', path: '/cardashboard' },
+              { label: 'Update Car', path: '' }, // Ubah ini sesuai dengan path yang sesuai
             ]}
           />
           <h4>Update Car</h4>

@@ -87,7 +87,7 @@ export class UsersService implements IUsersService {
 
     const role = await this.usersRepository.findRoleById(user.roleId);
 
-    return new UserCurrentDto(user.id, user.username, role?.userRole ?? '');
+    return new UserCurrentDto(user.id, user.username, user.email, role?.userRole ?? '');
   }
 
   async getAllUsers(
@@ -105,7 +105,12 @@ export class UsersService implements IUsersService {
 
     const usersWithRoles = users.map(
       (user) =>
-        new UserCurrentDto(user.id, user.username, user.role?.userRole ?? '')
+        new UserCurrentDto(
+          user.id,
+          user.email,
+          user.username,
+          user.role?.userRole ?? ''
+        )
     );
 
     return { users: usersWithRoles, totalCount };

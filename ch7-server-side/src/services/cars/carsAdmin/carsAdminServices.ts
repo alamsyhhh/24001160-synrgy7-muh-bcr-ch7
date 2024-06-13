@@ -115,7 +115,8 @@ class CarService implements ICarService {
           }
 
           const imageUrl = result.secure_url;
-
+          const startRentDate = startRent ? new Date(startRent) : null;
+          const finishRentDate = finishRent ? new Date(finishRent) : null;
           try {
             const newCar: CarDTO = {
               id: uuidv4(),
@@ -123,8 +124,8 @@ class CarService implements ICarService {
               category,
               price: parseInt(price, 10),
               image: imageUrl,
-              startRent: startRent ? new Date(startRent) : null,
-              finishRent: finishRent ? new Date(finishRent) : null,
+              startRent: startRentDate ? startRentDate.toISOString() : null,
+              finishRent: finishRentDate ? finishRentDate.toISOString() : null,
               onPublish: true,
               createdBy: username,
               updatedBy: username,
@@ -137,6 +138,8 @@ class CarService implements ICarService {
             resolve(createdCar);
           } catch (err) {
             console.error(err);
+            console.error('Error converting dates:', error);
+            throw new Error('Failed to create car: Invalid date format');
             reject(new Error('Failed to create car'));
           }
         }

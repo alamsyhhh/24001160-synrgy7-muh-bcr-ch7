@@ -1626,10 +1626,21 @@ a {
 }
 
 .table-input {
-  width: 400px; /* Adjust the width as needed */
+  width: 400px;
+}
+.table-input-file {
+  width: 400px;
+  margin-top: 25px;
 }
 .label-column {
   width: 100px;
+}
+
+.table-input2 {
+  width: 190px; /* Adjust the width as needed */
+}
+.label-column2 {
+  width: 200px;
 }
 
 .required-asterisk {
@@ -1643,6 +1654,7 @@ a {
 
 .tb {
   background-color: #f8f9fa !important;
+  margin-right: 10px;
 }
 
 /* Add this CSS to your stylesheet */
@@ -1654,7 +1666,13 @@ a {
   background-color: #e6e6e6; /* Slightly darker gray background for even rows */
 }
 .custom-thead {
-  background-color: #cfd4ed !important; /* Set the background color to #CFD4ED */
+  background-color: #cfd4ed !important;
+}
+
+@media (max-width: 1100px) {
+  .sortable .sort-icon {
+    display: none;
+  }
 }
 
 .loading-overlay {

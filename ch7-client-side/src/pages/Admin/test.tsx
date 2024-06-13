@@ -15,17 +15,20 @@ const CarDashboardPage: React.FC = () => {
   const { cars, loading, filterCarsByCategory, filterCarsByName, deleteCar } =
     useCarsContext();
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
-  const [searchedCars, setSearchedCars] = useState<Car[]>([]);
+  const [searchedCars] = useState<Car[]>([]);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get('name');
   const navigate = useNavigate();
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string>('');
-  const [toastType, setToastType] = useState<'success' | 'delete'>('success');
-  const [showDeleted, setShowDeleted] = useState<boolean>(false); // State to toggle showing deleted cars
+  const [toastType, setToastType] = useState<
+    'success' | 'delete' | 'not-found'
+  >('success');
+  const [showDeleted, setShowDeleted] = useState<boolean>(false);
   const [isActiveShowDeleted, setIsActiveShowDeleted] =
-    useState<boolean>(false); // State for isActive of Show Deleted button
+    useState<boolean>(false);
+  const [searchNotFound, setSearchNotFound] = useState<boolean>(false);
 
   useEffect(() => {
     feather.replace();
@@ -33,9 +36,9 @@ const CarDashboardPage: React.FC = () => {
 
   useEffect(() => {
     if (searchQuery) {
-      filterCarsByName(searchQuery, showDeleted); // Pass showDeleted to filterCarsByName
+      filterCarsByName(searchQuery, showDeleted);
     } else {
-      filterCarsByCategory(activeFilter || '', showDeleted); // Pass showDeleted to filterCarsByCategory
+      filterCarsByCategory(activeFilter || '', showDeleted);
     }
   }, [
     activeFilter,
@@ -55,24 +58,29 @@ const CarDashboardPage: React.FC = () => {
     }
   }, [location, navigate]);
 
+  useEffect(() => {
+    if (searchQuery && searchedCars.length === 0) {
+      setToastMessage('No cars found with the specified name.');
+      setToastType('not-found');
+      setShowToast(true);
+      setSearchNotFound(true);
+      setTimeout(() => {
+        setShowToast(false);
+        setSearchNotFound(false);
+      }, 5000);
+    }
+  }, [searchQuery, searchedCars]);
+
   const handleFilterClick = (filter: string) => {
     if (filter === 'Show Deleted') {
       setShowDeleted(!showDeleted);
-      setIsActiveShowDeleted(!showDeleted); // Toggle isActiveShowDeleted based on showDeleted
+      setIsActiveShowDeleted(!showDeleted);
     } else {
       setActiveFilter(filter === 'All' ? null : filter);
       filterCarsByCategory(filter, showDeleted);
       navigate(location.pathname);
     }
   };
-
-  useEffect(() => {
-    if (searchQuery) {
-      setSearchedCars(cars);
-    } else {
-      setSearchedCars([]);
-    }
-  }, [cars, searchQuery]);
 
   const handleDeleteCar = async (id: string) => {
     await deleteCar(id);
@@ -99,13 +107,20 @@ const CarDashboardPage: React.FC = () => {
               onClose={() => setShowToast(false)}
               message={toastMessage}
             />
-          ) : (
+          ) : toastType === 'delete' ? (
             <ToastComponentBlack
               show={showToast}
               onClose={() => setShowToast(false)}
               message={toastMessage}
             />
-          )}
+          ) : toastType === 'not-found' && searchNotFound ? (
+            <ToastComponent
+              show={showToast}
+              onClose={() => setShowToast(false)}
+              message={toastMessage}
+              variant="warning" // Make sure this matches the prop definition in ToastComponent
+            />
+          ) : null}
           <Breadcrumb breadcrumbs={breadcrumbs} />
           <div>
             <div className="d-flex justify-content-between align-items-center mb-3 mt-5">

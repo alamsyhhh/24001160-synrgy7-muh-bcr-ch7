@@ -15,6 +15,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ isSignUp }) => {
   const { login, register, loading, error, success, setError, setSuccess } =
     useAuth();
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     if (success) {
@@ -29,8 +30,9 @@ const AuthForm: React.FC<AuthFormProps> = ({ isSignUp }) => {
         }
       }
       setSuccess(false);
+      setError(''); // Clear error after success
     }
-  }, [success, isSignUp, navigate, setSuccess]);
+  }, [success, isSignUp, navigate, setSuccess, setError]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,7 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface BreadcrumbProps {
-  breadcrumbs: React.ReactNode[];
+  breadcrumbs: { label: string; path: string }[];
 }
 
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
@@ -12,15 +13,15 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
           <React.Fragment key={index}>
             <li className="breadcrumb-item">
               {index < breadcrumbs.length - 1 ? (
-                <a href="#" className="breadcrumb-separator">
-                  {breadcrumb}
-                </a>
+                <Link to={breadcrumb.path} className="breadcrumb-link">
+                  {breadcrumb.label}
+                </Link>
               ) : (
-                <span>{breadcrumb}</span>
+                <span>{breadcrumb.label}</span>
               )}
             </li>
             {index < breadcrumbs.length - 1 && (
-              <span className="breadcrumb-separator">{' > '}</span>
+              <span className="breadcrumb-separator mx-2"> {' > '}</span>
             )}
           </React.Fragment>
         ))}

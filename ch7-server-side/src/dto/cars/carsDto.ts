@@ -5,8 +5,8 @@ export interface CarDTO {
   price: number;
   image: string;
   onPublish: boolean;
-  startRent?: Date | null;
-  finishRent?: Date | null;
+  startRent?: Date | string | null;
+  finishRent?: Date | string | null;
   createdBy: string;
   updatedBy: string;
   deletedBy?: string | null;

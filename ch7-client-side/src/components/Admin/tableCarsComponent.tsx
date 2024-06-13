@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Car } from '../../services/carServices';
 import formatDateTime from '../../utils/formatDateTimeUtil';
+import formatRupiah from '../../utils/formatMoneyUtils';
 
 interface CarTableProps {
   cars: Car[];
@@ -100,62 +101,101 @@ const CarTable: React.FC<CarTableProps> = ({
         />
         <h6 className="mb-0">List Car</h6>
       </div>
-      <table className="table table-hover w-100">
-        <thead className="table-primary">
-          <tr>
-            <th scope="col">No</th>
-            <th scope="col" onClick={() => handleSort('name')}>
-              Name {getSortIcon('name')}
-            </th>
-            <th scope="col" onClick={() => handleSort('category')}>
-              Category {getSortIcon('category')}
-            </th>
-            <th scope="col" onClick={() => handleSort('price')}>
-              Price {getSortIcon('price')}
-            </th>
-            <th scope="col" onClick={() => handleSort('startRent')}>
-              Start Rent {getSortIcon('startRent')}
-            </th>
-            <th scope="col" onClick={() => handleSort('finishRent')}>
-              Finish Rent {getSortIcon('finishRent')}
-            </th>
-            <th scope="col" onClick={() => handleSort('createdAt')}>
-              Created At {getSortIcon('createdAt')}
-            </th>
-            <th scope="col" onClick={() => handleSort('updatedAt')}>
-              Updated At {getSortIcon('updatedAt')}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {loading ? (
+      <div className="table-responsive">
+        <table className="table table-hover w-100">
+          <thead className="table-primary">
             <tr>
-              <td colSpan={8} className="text-center">
-                Loading...
-              </td>
+              <th scope="col">No</th>
+              <th
+                scope="col"
+                className="sortable"
+                onClick={() => handleSort('name')}
+              >
+                <span>Name</span>
+                <span className="sort-icon">{getSortIcon('name')}</span>
+              </th>
+              <th
+                scope="col"
+                className="sortable"
+                onClick={() => handleSort('category')}
+              >
+                <span>Category</span>
+                <span className="sort-icon">{getSortIcon('category')}</span>
+              </th>
+              <th
+                scope="col"
+                className="sortable"
+                onClick={() => handleSort('price')}
+              >
+                <span>Price</span>
+                <span className="sort-icon">{getSortIcon('price')}</span>
+              </th>
+              <th
+                scope="col"
+                className="sortable"
+                onClick={() => handleSort('startRent')}
+              >
+                <span>Start Rent</span>
+                <span className="sort-icon">{getSortIcon('startRent')}</span>
+              </th>
+              <th
+                scope="col"
+                className="sortable"
+                onClick={() => handleSort('finishRent')}
+              >
+                <span>Finish Rent</span>
+                <span className="sort-icon">{getSortIcon('finishRent')}</span>
+              </th>
+              <th
+                scope="col"
+                className="sortable"
+                onClick={() => handleSort('createdAt')}
+              >
+                <span>Created At</span>
+                <span className="sort-icon">{getSortIcon('createdAt')}</span>
+              </th>
+              <th
+                scope="col"
+                className="sortable"
+                onClick={() => handleSort('updatedAt')}
+              >
+                <span>Updated At</span>
+                <span className="sort-icon">{getSortIcon('updatedAt')}</span>
+              </th>
             </tr>
-          ) : error ? (
-            <tr>
-              <td colSpan={8} className="text-center text-danger">
-                {error}
-              </td>
-            </tr>
-          ) : (
-            sortedCars.map((car, index) => (
-              <tr key={car.id}>
-                <th scope="row">{(page - 1) * pageSize + index + 1}</th>
-                <td>{car.name}</td>
-                <td>{car.category}</td>
-                <td>{car.price}</td>
-                <td>{car.startRent ? formatDateTime(car.startRent) : '-'}</td>
-                <td>{car.finishRent ? formatDateTime(car.finishRent) : '-'}</td>
-                <td>{formatDateTime(car.createdAt)}</td>
-                <td>{formatDateTime(car.updatedAt)}</td>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan={8} className="text-center">
+                  Loading...
+                </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : error ? (
+              <tr>
+                <td colSpan={8} className="text-center text-danger">
+                  {error}
+                </td>
+              </tr>
+            ) : (
+              sortedCars.map((car, index) => (
+                <tr key={car.id}>
+                  <th scope="row">{(page - 1) * pageSize + index + 1}</th>
+                  <td>{car.name}</td>
+                  <td>{car.category}</td>
+                  <td>{formatRupiah(car.price)}</td>
+                  <td>{car.startRent ? formatDateTime(car.startRent) : '-'}</td>
+                  <td>
+                    {car.finishRent ? formatDateTime(car.finishRent) : '-'}
+                  </td>
+                  <td>{formatDateTime(car.createdAt)}</td>
+                  <td>{formatDateTime(car.updatedAt)}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
       <div className="d-flex justify-content-between align-items-center mt-3">
         <div className="d-flex align-items-center">
           <div className="mr-3 mb-5">

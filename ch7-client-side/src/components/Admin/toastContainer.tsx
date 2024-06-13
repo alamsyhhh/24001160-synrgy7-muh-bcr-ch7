@@ -5,9 +5,10 @@ interface ToastProps {
   show: boolean;
   onClose: () => void;
   message: string;
+  variant?: 'success' | 'delete' | 'warning'; // Make variant optional
 }
 
-const ToastComponent: React.FC<ToastProps> = ({ show, onClose, message }) => {
+const ToastComponent: React.FC<ToastProps> = ({ show, onClose, message, variant }) => {
   return (
     <Toast
       onClose={onClose}
@@ -19,15 +20,15 @@ const ToastComponent: React.FC<ToastProps> = ({ show, onClose, message }) => {
         top: '90px',
         left: '50%',
         transform: 'translateX(-50%)',
-        backgroundColor: '#28a745',
+        backgroundColor: variant === 'warning' ? '#ffc107' : '#28a745',
         color: 'white',
         minWidth: '600px',
         borderRadius: '8px',
         padding: '16px',
         zIndex: 9999,
         textAlign: 'center',
-        textTransform: 'uppercase', 
-        fontSize: '1.2em', 
+        textTransform: 'uppercase',
+        fontSize: '1.2em',
       }}
     >
       <Toast.Body>{message}</Toast.Body>

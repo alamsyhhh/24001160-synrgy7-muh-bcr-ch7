@@ -1,4 +1,6 @@
-import React from 'react';
+// UserTable.tsx
+
+import React, { useState } from 'react';
 import { User } from '../../services/userService';
 
 interface UserTableProps {
@@ -22,6 +24,40 @@ const UserTable: React.FC<UserTableProps> = ({
   setPage,
   setPageSize,
 }) => {
+  const [sortConfig, setSortConfig] = useState<{
+    key: keyof User;
+    direction: 'asc' | 'desc';
+  } | null>(null);
+
+  const handleSort = (key: keyof User) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig?.key === key && sortConfig?.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedUsers = React.useMemo(() => {
+    if (sortConfig !== null) {
+      return [...users].sort((a, b) => {
+        const key = sortConfig?.key;
+        const direction = sortConfig?.direction;
+
+        if (a[key] !== undefined && b[key] !== undefined) {
+          if (a[key] < b[key]) {
+            return direction === 'asc' ? -1 : 1;
+          }
+          if (a[key] > b[key]) {
+            return direction === 'asc' ? 1 : -1;
+          }
+        }
+
+        return 0;
+      });
+    }
+    return users;
+  }, [users, sortConfig]);
+
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
@@ -48,6 +84,13 @@ const UserTable: React.FC<UserTableProps> = ({
     return pages;
   };
 
+  const getSortIcon = (key: keyof User) => {
+    if (!sortConfig || sortConfig.key !== key) {
+      return '▼';
+    }
+    return sortConfig.direction === 'asc' ? '▲' : '▼';
+  };
+
   return (
     <div className="mt-1">
       <div className="d-flex align-items-center mb-3">
@@ -62,27 +105,50 @@ const UserTable: React.FC<UserTableProps> = ({
         <thead className="table-primary">
           <tr>
             <th scope="col">No</th>
-            <th scope="col">Username</th>
-            <th scope="col">Role</th>
+            <th
+              scope="col"
+              className="sortable"
+              onClick={() => handleSort('email')}
+            >
+              <span>Email</span>
+              <span className="sort-icon">{getSortIcon('email')}</span>
+            </th>
+            <th
+              scope="col"
+              className="sortable"
+              onClick={() => handleSort('username')}
+            >
+              <span>Username</span>
+              <span className="sort-icon">{getSortIcon('username')}</span>
+            </th>
+            <th
+              scope="col"
+              className="sortable"
+              onClick={() => handleSort('role')}
+            >
+              <span>Role</span>
+              <span className="sort-icon">{getSortIcon('role')}</span>
+            </th>
           </tr>
         </thead>
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan={3} className="text-center">
+              <td colSpan={4} className="text-center">
                 Loading...
               </td>
             </tr>
           ) : error ? (
             <tr>
-              <td colSpan={3} className="text-center text-danger">
+              <td colSpan={4} className="text-center text-danger">
                 {error}
               </td>
             </tr>
           ) : (
-            users.map((user, index) => (
+            sortedUsers.map((user, index) => (
               <tr key={user.id}>
                 <th scope="row">{(page - 1) * pageSize + index + 1}</th>
+                <td>{user.email}</td>
                 <td>{user.username}</td>
                 <td>{user.role}</td>
               </tr>

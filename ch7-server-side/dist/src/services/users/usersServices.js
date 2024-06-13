@@ -78,7 +78,7 @@ class UsersService {
                 });
             }
             const role = yield this.usersRepository.findRoleById(user.roleId);
-            return new usersCurrentDto_1.UserCurrentDto(user.id, user.username, (_a = role === null || role === void 0 ? void 0 : role.userRole) !== null && _a !== void 0 ? _a : '');
+            return new usersCurrentDto_1.UserCurrentDto(user.id, user.username, user.email, (_a = role === null || role === void 0 ? void 0 : role.userRole) !== null && _a !== void 0 ? _a : '');
         });
     }
     getAllUsers(page, pageSize) {
@@ -88,7 +88,10 @@ class UsersService {
             const offset = (page - 1) * pageSize;
             const users = yield this.usersRepository.findAllUsersWithRoles(offset, pageSize // Menggunakan pageSize sebagai nilai untuk parameter limit
             );
-            const usersWithRoles = users.map((user) => { var _a, _b; return new usersCurrentDto_1.UserCurrentDto(user.id, user.username, (_b = (_a = user.role) === null || _a === void 0 ? void 0 : _a.userRole) !== null && _b !== void 0 ? _b : ''); });
+            const usersWithRoles = users.map((user) => {
+                var _a, _b;
+                return new usersCurrentDto_1.UserCurrentDto(user.id, user.email, user.username, (_b = (_a = user.role) === null || _a === void 0 ? void 0 : _a.userRole) !== null && _b !== void 0 ? _b : '');
+            });
             return { users: usersWithRoles, totalCount };
         });
     }

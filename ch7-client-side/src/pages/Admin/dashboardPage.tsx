@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Dashboard from '../../section/Admin/dashboardSection';
 import CarTable from '../../components/Admin/tableCarsComponent';
 import UserTable from '../../components/Admin/userTableComponent';
@@ -26,17 +26,12 @@ const DashboardPage: React.FC = () => {
     setPageSize: setUserPageSize,
   } = useUsers();
 
-  const breadcrumbs = ['Dashboard', 'Dashboard'];
+  const breadcrumbs = [
+    { label: 'Dashboard', path: '/dashboard' },
+    { label: 'Dashboard', path: '/dashboard' },
+  ];
 
-  useEffect(() => {
-    feather.replace();
-  }, [cars]);
-
-  useEffect(() => {
-    fetchCars();
-  }, [page, pageSize]);
-
-  const fetchCars = async () => {
+  const fetchCars = useCallback(async () => {
     setLoading(true);
     try {
       const response = await getPaginatedCars(page, pageSize);
@@ -49,7 +44,15 @@ const DashboardPage: React.FC = () => {
       );
       setLoading(false);
     }
-  };
+  }, [page, pageSize]);
+
+  useEffect(() => {
+    feather.replace();
+  }, [cars]);
+
+  useEffect(() => {
+    fetchCars();
+  }, [fetchCars]);
 
   return (
     <Dashboard

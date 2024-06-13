@@ -18,7 +18,9 @@ export interface Car {
   image: string;
   startRent: string | null;
   finishRent: string | null;
+  createdAt: string | null;
   updatedAt: string | null;
+  deletedBy: string | null; // Add deletedBy property
 }
 
 export interface CarsContextType {
@@ -26,16 +28,15 @@ export interface CarsContextType {
   loading: boolean;
   error: string | null;
   toastMessage: string;
-  fetchCars: () => void;
-  filterCarsByCategory: (category: string) => void;
-  filterCarsByName: (name: string) => void;
+  fetchCars: (showDeleted?: boolean) => void; // Update fetchCars function signature
+  filterCarsByCategory: (category: string, showDeleted?: boolean) => void; // Update filterCarsByCategory function signature
+  filterCarsByName: (name: string, showDeleted?: boolean) => void; // Update filterCarsByName function signature
   fetchCarById: (id: string) => Promise<Car | null>;
   createCar: (formData: FormData) => Promise<unknown>;
   updateCar: (id: string, formData: FormData) => Promise<unknown>;
   deleteCar: (id: string) => Promise<void>;
 }
 
-// Export CarsContext di sini
 export const CarsContext = createContext<CarsContextType | undefined>(
   undefined
 );
@@ -48,13 +49,21 @@ export const CarsProvider: React.FC<{ children: React.ReactNode }> = ({
   const [error, setError] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string>('');
 
-  const fetchCars = useCallback(async () => {
+  const fetchCars = useCallback(async (showDeleted?: boolean) => {
     try {
       const carsData = await getAllCars();
       if (Array.isArray(carsData)) {
-        setCars(carsData);
+        setCars(
+          carsData.filter((car) =>
+            showDeleted ? car.deletedBy !== null : !car.deletedBy
+          )
+        ); // Filter based on showDeleted flag
       } else if (carsData && carsData.data && Array.isArray(carsData.data)) {
-        setCars(carsData.data);
+        setCars(
+          carsData.data.filter((car: Car) =>
+            showDeleted ? car.deletedBy !== null : !car.deletedBy
+          )
+        ); // Filter based on showDeleted flag
       } else {
         console.error(
           'Data received from server is not in the expected format:',
@@ -74,14 +83,14 @@ export const CarsProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   useEffect(() => {
-    fetchCars();
+    fetchCars(); // Fetch all cars initially
   }, [fetchCars]);
 
   const filterCarsByCategory = useCallback(
-    async (category: string) => {
+    async (category: string, showDeleted?: boolean) => {
       try {
         if (category === '') {
-          fetchCars();
+          fetchCars(showDeleted);
         } else {
           const filteredCarsData = await getCarsByCategory(category);
           if (
@@ -89,7 +98,11 @@ export const CarsProvider: React.FC<{ children: React.ReactNode }> = ({
             filteredCarsData.data &&
             Array.isArray(filteredCarsData.data.cars)
           ) {
-            setCars(filteredCarsData.data.cars);
+            setCars(
+              filteredCarsData.data.cars.filter((car: Car) =>
+                showDeleted ? car.deletedBy !== null : !car.deletedBy
+              )
+            ); // Filter based on showDeleted flag
           } else {
             console.error(
               'Data received from server is not in the expected format:',
@@ -105,26 +118,33 @@ export const CarsProvider: React.FC<{ children: React.ReactNode }> = ({
     [fetchCars]
   );
 
-  const filterCarsByName = useCallback(async (name: string) => {
-    try {
-      const filteredCarsData = await getCarsByName(name);
-      if (
-        filteredCarsData &&
-        filteredCarsData.data &&
-        Array.isArray(filteredCarsData.data.cars)
-      ) {
-        setCars(filteredCarsData.data.cars);
-      } else {
-        console.error(
-          'Data received from server is not in the expected format:',
-          filteredCarsData
-        );
-        setError('Invalid data received from server');
+  const filterCarsByName = useCallback(
+    async (name: string, showDeleted?: boolean) => {
+      try {
+        const filteredCarsData = await getCarsByName(name);
+        if (
+          filteredCarsData &&
+          filteredCarsData.data &&
+          Array.isArray(filteredCarsData.data.cars)
+        ) {
+          setCars(
+            filteredCarsData.data.cars.filter((car: Car) =>
+              showDeleted ? car.deletedBy !== null : !car.deletedBy
+            )
+          ); // Filter based on showDeleted flag
+        } else {
+          console.error(
+            'Data received from server is not in the expected format:',
+            filteredCarsData
+          );
+          setError('Invalid data received from server');
+        }
+      } catch (error) {
+        setError('Failed to fetch cars data by name');
       }
-    } catch (error) {
-      setError('Failed to fetch cars data by name');
-    }
-  }, []);
+    },
+    []
+  );
 
   const fetchCarById = async (id: string) => {
     try {
