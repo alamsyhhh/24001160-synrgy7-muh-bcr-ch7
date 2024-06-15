@@ -31,7 +31,7 @@ const CarCardComponent: React.FC<CarCardProps> = ({
 
   return (
     <>
-      <div className="col-sm-4 mb-3 mt-3 mb-sm-4">
+      <div className="col-lg-4 mb-3 mt-3 mb-sm-4">
         <div className="card">
           <img
             src={car.image}
@@ -60,7 +60,10 @@ const CarCardComponent: React.FC<CarCardProps> = ({
                 <span>
                   <i className="inp-icon user" data-feather="clock"></i>
                 </span>
-                <p>Updated at {car.updatedAt ? formatDateTime(car.updatedAt) : '-'}</p>
+                <p>
+                  Updated at{' '}
+                  {car.updatedAt ? formatDateTime(car.updatedAt) : '-'}
+                </p>
               </div>
             </div>
             <div className="card-buttons d-flex justify-content-center gap-2 flex-wrap">

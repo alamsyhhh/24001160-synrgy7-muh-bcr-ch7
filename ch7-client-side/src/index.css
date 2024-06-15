@@ -1336,7 +1336,7 @@ body {
 
 /* @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap'); */
 :root {
-  --header-height: 3rem;
+  --header-height: 4rem;
   --nav-width: 68px;
   --first-color: #0d28a6;
   --first-color-light: #afa5d9;
@@ -1583,7 +1583,7 @@ a {
   object-fit: cover;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 450px) {
   .content {
     margin: calc(var(--header-height) + 3rem) 0 0 0;
     padding-left: calc(var(--nav-width) + 2rem);

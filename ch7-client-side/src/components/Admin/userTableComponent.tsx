@@ -101,7 +101,7 @@ const UserTable: React.FC<UserTableProps> = ({
         />
         <h6 className="mb-0">List Users</h6>
       </div>
-      <table className="table table-hover w-100">
+      <table className="table table-lg table-hover w-100">
         <thead className="table-primary">
           <tr>
             <th scope="col">No</th>

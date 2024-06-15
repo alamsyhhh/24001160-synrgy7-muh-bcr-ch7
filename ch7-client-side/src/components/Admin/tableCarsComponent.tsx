@@ -102,7 +102,7 @@ const CarTable: React.FC<CarTableProps> = ({
         <h6 className="mb-0">List Car</h6>
       </div>
       <div className="table-responsive">
-        <table className="table table-hover w-100">
+        <table className="table table-lg table-hover w-100">
           <thead className="table-primary">
             <tr>
               <th scope="col">No</th>
