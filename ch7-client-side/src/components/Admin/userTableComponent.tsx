@@ -1,5 +1,3 @@
-// UserTable.tsx
-
 import React, { useState } from 'react';
 import { User } from '../../services/userService';
 
@@ -44,10 +42,10 @@ const UserTable: React.FC<UserTableProps> = ({
         const direction = sortConfig?.direction;
 
         if (a[key] !== undefined && b[key] !== undefined) {
-          if (a[key] < b[key]) {
+          if (a[key]! < b[key]!) {
             return direction === 'asc' ? -1 : 1;
           }
-          if (a[key] > b[key]) {
+          if (a[key]! > b[key]!) {
             return direction === 'asc' ? 1 : -1;
           }
         }
@@ -64,6 +62,7 @@ const UserTable: React.FC<UserTableProps> = ({
 
   const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPageSize(Number(e.target.value));
+    setPage(1); // Always set page to 1 when pageSize changes
   };
 
   const handleJumpToPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

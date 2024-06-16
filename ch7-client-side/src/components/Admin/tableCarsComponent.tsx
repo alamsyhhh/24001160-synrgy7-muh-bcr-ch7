@@ -64,6 +64,7 @@ const CarTable: React.FC<CarTableProps> = ({
 
   const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPageSize(Number(e.target.value));
+    setPage(1); // Always set page to 1 when pageSize changes
   };
 
   const handleJumpToPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
